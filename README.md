@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
   <img src="https://www.tensorflow.org/images/tf_logo_transp.png"><br><br>
 </div>
@@ -96,3 +97,7 @@ Learn more about the TensorFlow community at the [community page of tensorflow.o
 ## License
 
 [Apache License 2.0](LICENSE)
+=======
+# cs263_spring2018
+class project for cs263, Spring 2018
+>>>>>>> 47c3b70319a9d8a3585c4ca9b81334f05af33831
