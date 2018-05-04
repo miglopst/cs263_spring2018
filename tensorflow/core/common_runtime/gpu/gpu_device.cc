@@ -28,6 +28,7 @@ limitations under the License.
 #include <map>
 #include <tuple>
 #include <vector>
+#include <iostream>
 
 #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 #include "tensorflow/core/common_runtime/device_factory.h"
@@ -114,6 +115,7 @@ class EigenCudaStreamDevice : public ::Eigen::StreamInterface {
   }
 
   void* allocate(size_t num_bytes) const override {
+    std::cout << "[Peng][gpu_device.cc] allocate " << num_bytes << " bytes" << std::endl;
     void* ret = allocator_->AllocateRaw(32 /* alignment */, num_bytes);
     if (ret == nullptr) {
       if (context_) {
@@ -171,6 +173,7 @@ class EigenCudaStreamDevice : public ::Eigen::StreamInterface {
       LogMemory::RecordRawDeallocation(data->operation_, data->step_id_,
                                        data->address_, data->allocator_, false);
     }
+    std::cout << "[Peng][gpu_device.cc] Deallocate" << std::endl;
     data->allocator_->DeallocateRaw(data->address_);
     delete data;
   }
@@ -1053,6 +1056,9 @@ Status BaseGPUDeviceFactory::CreateGPUDevice(const SessionOptions& options,
   LOG(INFO) << "Created TensorFlow device (" << device_name << " with "
             << (stats.bytes_limit >> 20) << " MB memory) -> physical GPU ("
             << GetShortDeviceDescription(cuda_gpu_id, desc) << ")";
+  std::cout << "[Peng] Created TensorFlow device (" << device_name << " with "
+            << (stats.bytes_limit >> 20) << " MB memory) -> physical GPU ("
+            << GetShortDeviceDescription(cuda_gpu_id, desc) << ")" << std::endl;
   TF_RETURN_IF_ERROR(gpu_device->Init(options));
   devices->push_back(gpu_device);
 
