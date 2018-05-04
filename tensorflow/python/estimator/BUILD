@@ -205,6 +205,7 @@ py_test(
         "no_pip",
         "noasan",  # test flakily times out in asan mode.
         "notsan",  # b/67510291
+        "optonly",  # flakily times out in fastbuild
     ],
     deps = [
         ":baseline",
@@ -477,6 +478,7 @@ py_library(
         "//tensorflow/python:util",
         "//tensorflow/python/data",
         "//tensorflow/python/saved_model:builder",
+        "//tensorflow/python/saved_model:constants",
         "//tensorflow/python/saved_model:tag_constants",
         "//third_party/py/numpy",
         "@six_archive//:six",
