@@ -188,6 +188,9 @@ class CUDAHostAllocator : public SubAllocator {
   ~CUDAHostAllocator() override {}
 
   void* Alloc(size_t alignment, size_t num_bytes) override {
+    // <tianqi> It is only called twice at the very beginning.
+    // <tianqi> Not very important part.
+    std::cout << "[tianqi] core/common_runtime/gpu/pool_allocator.h:CUDAHostAllocator" << num_bytes << std::endl;
     void* ptr = nullptr;
     if (num_bytes > 0) {
       ptr = stream_exec_->HostMemoryAllocate(num_bytes);
