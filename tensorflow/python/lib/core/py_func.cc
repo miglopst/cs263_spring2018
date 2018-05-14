@@ -16,6 +16,7 @@ limitations under the License.
 #include "tensorflow/python/lib/core/py_func.h"
 
 #include <array>
+#include <iostream>
 
 #include "numpy/arrayobject.h"
 #include "tensorflow/c/eager/c_api.h"
@@ -273,7 +274,9 @@ Status DoCallPyFunc(PyCall* call, bool* out_log_on_error) {
 class NumpyTensorBuffer : public TensorBuffer {
  public:
   NumpyTensorBuffer(PyArrayObject* array, size_t len, void* data)
-      : array_(array), len_(len), data_(data) {}
+      : array_(array), len_(len), data_(data) {
+    std::cout << "[Peng]tensorflow/python/lib/core/py_func.cc:NumpyTensorBuffer()" << std::endl;
+  }
 
   ~NumpyTensorBuffer() override {
     // Note: The session::run wrapper is responsible for freeing this while

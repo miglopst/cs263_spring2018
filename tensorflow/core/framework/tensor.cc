@@ -27,6 +27,8 @@ limitations under the License.
 //   includes running the constructor and destructor of T[], encoding
 //   an decoding T[] into/from a Cord, etc.
 
+#include <iostream>
+
 #include "tensorflow/core/framework/tensor.h"
 
 #include "tensorflow/core/framework/allocation_description.pb.h"
@@ -435,12 +437,16 @@ struct ProtoHelper<Eigen::half> {
 
 template <typename T>
 Buffer<T>::Buffer(Allocator* a, int64 n)
-    : BufferBase(a), data_(a->Allocate<T>(n)), elem_(n) {}
+    : BufferBase(a), data_(a->Allocate<T>(n)), elem_(n) {
+  std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1" << std::endl;
+}
 
 template <typename T>
 Buffer<T>::Buffer(Allocator* a, int64 n,
                   const AllocationAttributes& allocation_attr)
-    : BufferBase(a), data_(a->Allocate<T>(n, allocation_attr)), elem_(n) {}
+    : BufferBase(a), data_(a->Allocate<T>(n, allocation_attr)), elem_(n) {
+  std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2" << std::endl;
+}
 
 template <typename T>
 Buffer<T>::~Buffer() {
@@ -448,6 +454,7 @@ Buffer<T>::~Buffer() {
     if (LogMemory::IsEnabled()) {
       RecordDeallocation();
     }
+    std::cout << "[Peng]tensorflow/core/framework/tensor.cc:~Buffer()" << std::endl;
     alloc_->Deallocate<T>(data_, elem_);
   }
 }
@@ -751,6 +758,7 @@ class SubBuffer : public TensorBuffer {
   // This buffer is an alias to buf[delta, delta + n).
   SubBuffer(TensorBuffer* buf, int64 delta, int64 n)
       : root_(buf->root_buffer()), data_(buf->base<T>() + delta), elem_(n) {
+    std::cout << "[Peng]tensorflow/core/framework/tensor.cc:SubBuffer()" << std::endl;
     // Sanity check. The caller should ensure the sub buffer is valid.
     CHECK_LE(root_->base<T>(), this->base<T>());
     T* root_limit = root_->base<T>() + root_->size() / sizeof(T);

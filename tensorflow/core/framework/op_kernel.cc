@@ -232,9 +232,9 @@ Status OpKernelConstruction::allocate_temp(DataType type,
   *out_temp = new_temp;
 
   // [tianqi] track allocation begin
-  Allocator* a = get_allocator(allocator_attr);
-  int64 alloc_size = a->AllocatedSize(const_cast<char*>(out_temp->tensor_data().data()));
-  std::cout << "[tianqi] core/framework/op_kernel.cc: allocate_temp-" << alloc_size << std::e       ndl;
+  //Allocator* a = get_allocator(allocator_attr);
+  //int64 alloc_size = a->AllocatedSize(const_cast<char*>(out_temp->tensor_data().data()));
+  //std::cout << "[tianqi] core/framework/op_kernel.cc: allocate_temp-" << alloc_size << std::endl;
   // [tianqi] track allocation end
   return Status::OK();
 }
@@ -714,8 +714,8 @@ Status OpKernelContext::allocate_output(int index, const TensorShape& shape,
    // unable to print out size here: false allocator doesn't track sizes
    // Allocator* a = get_allocator(attr);
    // int64 alloc_size = a->AllocatedSize(const_cast<char*>((*output)->tensor_data().data())       );
-    std::cout << "[tianqi] core/framework/op_kernel.cc: allocate_output-" <<  std::endl;
-    // [tianqi] track allocation end
+   // std::cout << "[tianqi] core/framework/op_kernel.cc: allocate_output-" <<  std::endl;
+   // [tianqi] track allocation end
   }
   return s;
 }
@@ -760,8 +760,8 @@ Status OpKernelContext::allocate_persistent(DataType type,
 
     // [tianqi] track allocation begin
     Allocator* a = get_allocator(attr);
-    int64 alloc_size = a->AllocatedSize(const_cast<char*>((*out_tensor)->tensor_data().data()       ));
-    std::cout << "[tianqi] core/framework/op_kernel.cc: allocate_persistent-" << alloc_size <       < std::endl;
+    int64 alloc_size = a->AllocatedSize(const_cast<char*>((*out_tensor)->tensor_data().data()));
+    std::cout << "[tianqi] core/framework/op_kernel.cc: allocate_persistent-" << alloc_size << std::endl;
     // [tianqi] track allocation end
   }
   return s;

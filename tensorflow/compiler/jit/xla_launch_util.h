@@ -109,6 +109,8 @@ class XlaTensorBuffer : public TensorBuffer {
       : expected_size_(expected_size),
         actual_size_(actual_size),
         allocator_(allocator) {
+    std::cout << "[Peng]tensorflow/compiler/jit/xla_launch_util.h:XlaTensorBuffer(),expected_size" << expected_size << std::endl;
+    std::cout << "[Peng]tensorflow/compiler/jit/xla_launch_util.h:XlaTensorBuffer(),actual_size" << actual_size << std::endl;
     data_ = const_cast<void*>(ptr);
   }
 
