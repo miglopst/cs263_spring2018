@@ -1,0 +1,145 @@
+debug-3 enabled
+[roottracer.cc]: Tensor inserted into rootset, TID = 1
+[roottracer.cc]: Tensor inserted into rootset, TID = 2
+[roottracer.cc]: Tensor inserted into rootset, TID = 3
+[roottracer.cc]: Tensor inserted into rootset, TID = 4
+[roottracer.cc]: Tensor inserted into rootset, TID = 5
+[roottracer.cc]: Tensor inserted into rootset, TID = 6
+[roottracer.cc]: Tensor inserted into rootset, TID = 7
+[roottracer.cc]: Tensor inserted into rootset, TID = 8
+[roottracer.cc]: Tensor inserted into rootset, TID = 9
+[roottracer.cc]: Tensor inserted into rootset, TID = 10
+[roottracer.cc]: Tensor inserted into rootset, TID = 11
+[roottracer.cc]: Tensor inserted into rootset, TID = 12
+[roottracer.cc]: Tensor inserted into rootset, TID = 13
+[roottracer.cc]: Tensor inserted into rootset, TID = 14
+[roottracer.cc]: Tensor inserted into rootset, TID = 15
+[roottracer.cc]: Tensor inserted into rootset, TID = 16
+[roottracer.cc]: Tensor inserted into rootset, TID = 17
+[roottracer.cc]: Tensor inserted into rootset, TID = 18
+[roottracer.cc]: Tensor inserted into rootset, TID = 19
+[roottracer.cc]: Tensor inserted into rootset, TID = 20
+[roottracer.cc]: Tensor inserted into rootset, TID = 21
+[roottracer.cc]: Tensor inserted into rootset, TID = 22
+[roottracer.cc]: Tensor inserted into rootset, TID = 23
+[roottracer.cc]: Tensor inserted into rootset, TID = 24
+[roottracer.cc]: Tensor inserted into rootset, TID = 25
+[roottracer.cc]: Tensor inserted into rootset, TID = 26
+[roottracer.cc]: Tensor inserted into rootset, TID = 27
+[roottracer.cc]: Tensor inserted into rootset, TID = 28
+[roottracer.cc]: Tensor inserted into rootset, TID = 29
+[roottracer.cc]: Tensor inserted into rootset, TID = 30
+[roottracer.cc]: Tensor inserted into rootset, TID = 31
+[roottracer.cc]: Tensor inserted into rootset, TID = 32
+[roottracer.cc]: Tensor inserted into rootset, TID = 33
+[roottracer.cc]: Tensor inserted into rootset, TID = 34
+[roottracer.cc]: Tensor inserted into rootset, TID = 35
+[roottracer.cc]: Tensor inserted into rootset, TID = 36
+[roottracer.cc]: Tensor inserted into rootset, TID = 37
+[roottracer.cc]: Tensor inserted into rootset, TID = 38
+[roottracer.cc]: Tensor inserted into rootset, TID = 39
+[roottracer.cc]: Tensor inserted into rootset, TID = 40
+[roottracer.cc]: Tensor inserted into rootset, TID = 41
+[roottracer.cc]: Tensor inserted into rootset, TID = 42
+[roottracer.cc]: Tensor inserted into rootset, TID = 43
+[roottracer.cc]: Tensor inserted into rootset, TID = 44
+[roottracer.cc]: Tensor inserted into rootset, TID = 45
+[roottracer.cc]: Tensor inserted into rootset, TID = 46
+[roottracer.cc]: Tensor inserted into rootset, TID = 47
+[roottracer.cc]: Tensor inserted into rootset, TID = 48
+[roottracer.cc]: Tensor inserted into rootset, TID = 49
+[roottracer.cc]: Tensor inserted into rootset, TID = 50
+[roottracer.cc]: Tensor inserted into rootset, TID = 51
+[roottracer.cc]: Tensor inserted into rootset, TID = 52
+[roottracer.cc]: Tensor inserted into rootset, TID = 53
+[roottracer.cc]: Tensor inserted into rootset, TID = 54
+[roottracer.cc]: Tensor inserted into rootset, TID = 55
+[roottracer.cc]: Tensor inserted into rootset, TID = 56
+[roottracer.cc]: Tensor inserted into rootset, TID = 57
+[roottracer.cc]: Tensor inserted into rootset, TID = 58
+[roottracer.cc]: Tensor inserted into rootset, TID = 59
+[roottracer.cc]: Tensor inserted into rootset, TID = 60
+[roottracer.cc]: Tensor inserted into rootset, TID = 61
+[roottracer.cc]: Tensor inserted into rootset, TID = 62
+[roottracer.cc]: Tensor inserted into rootset, TID = 63
+[roottracer.cc]: Tensor inserted into rootset, TID = 64
+[roottracer.cc]: Tensor inserted into rootset, TID = 65
+[roottracer.cc]: Tensor inserted into rootset, TID = 66
+[roottracer.cc]: Tensor inserted into rootset, TID = 67
+[roottracer.cc]: Tensor inserted into rootset, TID = 68
+[roottracer.cc]: Tensor inserted into rootset, TID = 69
+[roottracer.cc]: Tensor inserted into rootset, TID = 70
+[roottracer.cc]: Tensor inserted into rootset, TID = 71
+[roottracer.cc]: Tensor inserted into rootset, TID = 72
+[roottracer.cc]: Tensor inserted into rootset, TID = 73
+[roottracer.cc]: Tensor inserted into rootset, TID = 74
+[roottracer.cc]: Tensor inserted into rootset, TID = 75
+[roottracer.cc]: Tensor inserted into rootset, TID = 76
+[roottracer.cc]: Tensor inserted into rootset, TID = 77
+[roottracer.cc]: Tensor inserted into rootset, TID = 78
+[roottracer.cc]: Tensor inserted into rootset, TID = 79
+[roottracer.cc]: Tensor inserted into rootset, TID = 80
+[roottracer.cc]: Tensor inserted into rootset, TID = 81
+[roottracer.cc]: Tensor inserted into rootset, TID = 82
+[roottracer.cc]: Tensor inserted into rootset, TID = 83
+[roottracer.cc]: Tensor inserted into rootset, TID = 84
+[roottracer.cc]: Tensor inserted into rootset, TID = 85
+[roottracer.cc]: Tensor inserted into rootset, TID = 86
+[roottracer.cc]: Tensor inserted into rootset, TID = 87
+[roottracer.cc]: Tensor inserted into rootset, TID = 88
+[roottracer.cc]: Tensor inserted into rootset, TID = 89
+[roottracer.cc]: Tensor inserted into rootset, TID = 90
+[roottracer.cc]: Tensor inserted into rootset, TID = 91
+[roottracer.cc]: Tensor inserted into rootset, TID = 92
+[roottracer.cc]: Tensor inserted into rootset, TID = 93
+[roottracer.cc]: Tensor inserted into rootset, TID = 94
+[roottracer.cc]: Tensor inserted into rootset, TID = 95
+[roottracer.cc]: Tensor inserted into rootset, TID = 96
+[roottracer.cc]: Tensor inserted into rootset, TID = 97
+[roottracer.cc]: Tensor inserted into rootset, TID = 98
+[roottracer.cc]: Tensor inserted into rootset, TID = 99
+[roottracer.cc]: Tensor inserted into rootset, TID = 100
+[roottracer.cc]: Buffer ID (1) refered by tensor ID (1) is added to the tracing set
+[roottracer.cc]: Buffer ID (5) refered by tensor ID (5) is added to the tracing set
+[roottracer.cc]: Buffer ID (6) refered by tensor ID (6) is added to the tracing set
+[roottracer.cc]: Buffer ID (8) refered by tensor ID (8) is added to the tracing set
+[roottracer.cc]: Buffer ID (11) refered by tensor ID (11) is added to the tracing set
+[roottracer.cc]: Buffer ID (12) refered by tensor ID (12) is added to the tracing set
+[roottracer.cc]: Buffer ID (13) refered by tensor ID (13) is added to the tracing set
+[roottracer.cc]: Buffer ID (14) refered by tensor ID (14) is added to the tracing set
+[roottracer.cc]: Buffer ID (15) refered by tensor ID (15) is added to the tracing set
+[roottracer.cc]: Buffer ID (18) refered by tensor ID (18) is added to the tracing set
+[roottracer.cc]: Buffer ID (19) refered by tensor ID (19) is added to the tracing set
+[roottracer.cc]: Buffer ID (20) refered by tensor ID (20) is added to the tracing set
+[roottracer.cc]: Buffer ID (23) refered by tensor ID (23) is added to the tracing set
+[roottracer.cc]: Buffer ID (24) refered by tensor ID (24) is added to the tracing set
+[roottracer.cc]: Buffer ID (25) refered by tensor ID (25) is added to the tracing set
+[roottracer.cc]: Buffer ID (31) refered by tensor ID (31) is added to the tracing set
+[roottracer.cc]: Buffer ID (33) refered by tensor ID (33) is added to the tracing set
+[roottracer.cc]: Buffer ID (37) refered by tensor ID (37) is added to the tracing set
+[roottracer.cc]: Buffer ID (39) refered by tensor ID (39) is added to the tracing set
+[roottracer.cc]: Buffer ID (40) refered by tensor ID (40) is added to the tracing set
+[roottracer.cc]: Buffer ID (50) refered by tensor ID (50) is added to the tracing set
+[roottracer.cc]: Buffer ID (53) refered by tensor ID (53) is added to the tracing set
+[roottracer.cc]: Buffer ID (54) refered by tensor ID (54) is added to the tracing set
+[roottracer.cc]: Buffer ID (55) refered by tensor ID (55) is added to the tracing set
+[roottracer.cc]: Buffer ID (56) refered by tensor ID (56) is added to the tracing set
+[roottracer.cc]: Buffer ID (58) refered by tensor ID (58) is added to the tracing set
+[roottracer.cc]: Buffer ID (60) refered by tensor ID (60) is added to the tracing set
+[roottracer.cc]: Buffer ID (61) refered by tensor ID (61) is added to the tracing set
+[roottracer.cc]: Buffer ID (62) refered by tensor ID (62) is added to the tracing set
+[roottracer.cc]: Buffer ID (64) refered by tensor ID (64) is added to the tracing set
+[roottracer.cc]: Buffer ID (65) refered by tensor ID (65) is added to the tracing set
+[roottracer.cc]: Buffer ID (66) refered by tensor ID (66) is added to the tracing set
+[roottracer.cc]: Buffer ID (68) refered by tensor ID (68) is added to the tracing set
+[roottracer.cc]: Buffer ID (69) refered by tensor ID (69) is added to the tracing set
+[roottracer.cc]: Buffer ID (70) refered by tensor ID (70) is added to the tracing set
+[roottracer.cc]: Buffer ID (74) refered by tensor ID (74) is added to the tracing set
+[roottracer.cc]: Buffer ID (75) refered by tensor ID (75) is added to the tracing set
+[roottracer.cc]: Buffer ID (77) refered by tensor ID (77) is added to the tracing set
+[roottracer.cc]: Buffer ID (86) refered by tensor ID (86) is added to the tracing set
+[roottracer.cc]: Buffer ID (88) refered by tensor ID (88) is added to the tracing set
+[roottracer.cc]: Buffer ID (91) refered by tensor ID (91) is added to the tracing set
+[roottracer.cc]: Buffer ID (92) refered by tensor ID (92) is added to the tracing set
+[roottracer.cc]: Buffer ID (96) refered by tensor ID (96) is added to the tracing set
+[roottracer.cc]: Buffer ID (97) refered by tensor ID (97) is added to the tracing set
