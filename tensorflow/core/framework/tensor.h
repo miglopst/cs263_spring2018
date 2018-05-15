@@ -30,6 +30,8 @@ limitations under the License.
 #include "tensorflow/core/platform/macros.h"
 #include "tensorflow/core/platform/types.h"
 
+#include "tensorflow/core/tensorgc/roottracer.h"
+
 namespace tensorflow {
 
 // Forward declarations.  In particular, we forward declare protos so that their
@@ -42,6 +44,7 @@ class TensorCApi;
 class TensorDescription;
 class TensorProto;
 class VariantTensorData;
+template class RootTracer<Tensor, TensorBuffer>;
 namespace batch_util {
 Status CopyElementToSlice(Tensor element, Tensor* parent, int64 index);
 Status MaybeMoveSliceToElement(Tensor* parent, Tensor* element, int64 index);
@@ -118,6 +121,12 @@ class Tensor {
   Tensor(Tensor&& other);
 
   ~Tensor();
+
+  ///[Peng] return pointer to buf_
+  TensorBuffer* getbuf() const { return buf_; }
+
+  ///[Peng] tensor tracer
+  static RootTracer<Tensor, TensorBuffer> roottracer;
 
   /// Returns the data type.
   DataType dtype() const { return shape_.data_type(); }
@@ -563,6 +572,36 @@ class TensorBuffer : public core::RefCounted {
   // Whether this TensorBuffer owns the underlying memory.
   virtual bool OwnsMemory() const { return true; }
 };
+
+/*
+//these definitions are added to be included in roottracer file
+class BufferBase : public TensorBuffer {
+ public:
+  explicit BufferBase(Allocator* alloc);
+  TensorBuffer* root_buffer() override;
+  void FillAllocationDescription(AllocationDescription* proto) const override;
+ protected:
+  void RecordDeallocation();
+  Allocator* const alloc_;
+};
+
+template <typename T>
+class Buffer : public BufferBase {
+ public:
+  Buffer(Allocator* a, int64 n);
+  Buffer(Allocator* a, int64 n, const AllocationAttributes& allocation_attr);
+
+  void* data() const override;
+  size_t size() const override;
+
+ private:
+  T* data_;
+  int64 elem_;
+
+  ~Buffer() override;
+   TF_DISALLOW_COPY_AND_ASSIGN(Buffer);
+};
+*/
 
 template <typename T>
 T* Tensor::base() const {

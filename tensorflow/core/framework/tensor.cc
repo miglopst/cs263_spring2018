@@ -601,15 +601,32 @@ void UnrefIfNonNull(core::RefCounted* buf) {
 
 }  // end namespace
 
-Tensor::Tensor() : Tensor(DT_FLOAT) {}
+Tensor::Tensor() : Tensor(DT_FLOAT) {
+  //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 1" << std::endl; 
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 1";
+  Tensor::roottracer.addto_root_set(this);
+}
 
-Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) { set_dtype(type); }
+Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) { 
+  set_dtype(type); 
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2";
+  //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2" << std::endl;
+  //fprintf(stderr, "%s\n", "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2");
+  Tensor::roottracer.addto_root_set(this);
+}
 
 Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
     : shape_(shape), buf_(buf) {
   set_dtype(type);
+  //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 3" << std::endl;
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 3";
+  Tensor::roottracer.addto_root_set(this);
   RefIfNonNull(buf);
 }
+
+//[Peng]
+RootTracer<Tensor, TensorBuffer> Tensor::roottracer = RootTracer<Tensor, TensorBuffer>();
+
 
 bool Tensor::IsInitialized() const {
   return (buf_ != nullptr && buf_->data() != nullptr) ||
@@ -634,7 +651,12 @@ void Tensor::CheckIsAlignedAndSingleElement() const {
   CHECK_EQ(1, NumElements()) << "Must have a one element tensor";
 }
 
-Tensor::~Tensor() { UnrefIfNonNull(buf_); }
+Tensor::~Tensor() {
+  //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor" << std::endl;
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor";
+  Tensor::roottracer.rmfrom_root_set(this);
+  UnrefIfNonNull(buf_);
+}
 
 void Tensor::CopyFromInternal(const Tensor& other, const TensorShape& shape) {
   CHECK_EQ(shape.num_elements(), other.NumElements());
@@ -732,6 +754,9 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape)
     LogMemory::RecordTensorAllocation("Unknown", LogMemory::UNKNOWN_STEP_ID,
                                       *this);
   }
+  //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4" << std::endl;
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4";
+  Tensor::roottracer.addto_root_set(this);
 }
 
 Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
@@ -747,10 +772,15 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
     LogMemory::RecordTensorAllocation("Unknown (with attributes)",
                                       LogMemory::UNKNOWN_STEP_ID, *this);
   }
+  //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5" << std::endl;
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5";
+  Tensor::roottracer.addto_root_set(this);
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape)
-    : Tensor(cpu_allocator(), type, shape) {}
+    : Tensor(cpu_allocator(), type, shape) {
+  Tensor::roottracer.addto_root_set(this);
+}
 
 template <typename T>
 class SubBuffer : public TensorBuffer {

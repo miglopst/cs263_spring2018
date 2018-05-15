@@ -605,6 +605,7 @@ tf_cuda_library(
         "util/matmul_autotune.h",
         "util/util.h",
         "util/work_sharder.h",
+        "tensorgc/roottracer.h"
     ] + select({
         "//tensorflow:windows": [],
         "//tensorflow:windows_msvc": [],
@@ -2070,6 +2071,7 @@ FRAMEWORK_INTERNAL_PUBLIC_HEADERS = [
     "util/presized_cuckoo_map.h",
     "util/tensor_slice_set.h",
     "util/tensor_slice_util.h",
+    "tensorgc/roottracer.h",
 ] + tf_additional_framework_hdrs()
 
 tf_cuda_library(
@@ -2119,6 +2121,7 @@ tf_cuda_library(
             "example/**/*.cc",
             "framework/**/*.cc",
             "util/**/*.cc",
+            "tensorgc/**/*.cc",
         ] + [
             "graph/edgeset.cc",
             "graph/graph.cc",
