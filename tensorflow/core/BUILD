@@ -605,7 +605,8 @@ tf_cuda_library(
         "util/matmul_autotune.h",
         "util/util.h",
         "util/work_sharder.h",
-        "tensorgc/roottracer.h"
+        "tensorgc/roottracer.h",
+        "tensorgc/buftracer.h",
     ] + select({
         "//tensorflow:windows": [],
         "//tensorflow:windows_msvc": [],
@@ -2072,6 +2073,7 @@ FRAMEWORK_INTERNAL_PUBLIC_HEADERS = [
     "util/tensor_slice_set.h",
     "util/tensor_slice_util.h",
     "tensorgc/roottracer.h",
+    "tensorgc/buftracer.h",
 ] + tf_additional_framework_hdrs()
 
 tf_cuda_library(

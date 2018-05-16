@@ -31,6 +31,7 @@ limitations under the License.
 #include "tensorflow/core/platform/types.h"
 
 #include "tensorflow/core/tensorgc/roottracer.h"
+#include "tensorflow/core/tensorgc/buftracer.h"
 
 namespace tensorflow {
 
@@ -44,7 +45,11 @@ class TensorCApi;
 class TensorDescription;
 class TensorProto;
 class VariantTensorData;
+
+//[Peng] explicit instantiation of template class
 template class RootTracer<Tensor, TensorBuffer>;
+template class BufTracer<TensorBuffer>;
+
 namespace batch_util {
 Status CopyElementToSlice(Tensor element, Tensor* parent, int64 index);
 Status MaybeMoveSliceToElement(Tensor* parent, Tensor* element, int64 index);
@@ -552,6 +557,9 @@ class TensorBuffer : public core::RefCounted {
  public:
   ~TensorBuffer() override {}
 
+  //[Peng] buffer tracer
+  static BufTracer<TensorBuffer> buf_tracer;
+
   // data() points to a memory region of size() bytes.
   virtual void* data() const = 0;
   virtual size_t size() const = 0;
@@ -572,6 +580,9 @@ class TensorBuffer : public core::RefCounted {
   // Whether this TensorBuffer owns the underlying memory.
   virtual bool OwnsMemory() const { return true; }
 };
+
+//initialize buf_tracer
+//BufTracer<TensorBuffer> TensorBuffer::buf_tracer = BufTracer<TensorBuffer>();
 
 /*
 //these definitions are added to be included in roottracer file
@@ -809,11 +820,13 @@ typename TTypes<T, NDIMS>::ConstTensor Tensor::flat_inner_outer_dims(
 inline Tensor::Tensor(const Tensor& other)
     : shape_(other.shape()), buf_(other.buf_) {
   if (buf_) buf_->Ref();
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor copy constructor";
 }
 
 inline Tensor::Tensor(Tensor&& other)
     : shape_(std::move(other.shape())), buf_(other.buf_) {
   other.buf_ = nullptr;
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor move constructor";
 }
 
 inline Tensor& Tensor::operator=(Tensor&& other) {

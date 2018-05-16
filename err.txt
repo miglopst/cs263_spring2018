@@ -1,0 +1,101 @@
+WARNING: The following configs were expanded more than once: [cuda]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.
+Loading: 
+Loading: 0 packages loaded
+WARNING: /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/protobuf_archive/WORKSPACE:1: Workspace name in /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/protobuf_archive/WORKSPACE (@com_google_protobuf) does not match the name given in the repository's definition (@protobuf_archive); this will cause a build error in future versions
+WARNING: /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/grpc/WORKSPACE:1: Workspace name in /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/grpc/WORKSPACE (@com_github_grpc_grpc) does not match the name given in the repository's definition (@grpc); this will cause a build error in future versions
+WARNING: /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/grpc/BUILD:1960:1: in srcs attribute of cc_library rule @grpc//:grpc_nanopb: please do not import '@grpc//third_party/nanopb:pb_common.c' directly. You should either move the file to this package or depend on an appropriate rule there. Since this rule was created by the macro 'grpc_generate_one_off_targets', the error might have been caused by the macro implementation in /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/grpc/bazel/grpc_build_system.bzl:172:12
+WARNING: /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/grpc/BUILD:1960:1: in srcs attribute of cc_library rule @grpc//:grpc_nanopb: please do not import '@grpc//third_party/nanopb:pb_decode.c' directly. You should either move the file to this package or depend on an appropriate rule there. Since this rule was created by the macro 'grpc_generate_one_off_targets', the error might have been caused by the macro implementation in /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/grpc/bazel/grpc_build_system.bzl:172:12
+WARNING: /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/grpc/BUILD:1960:1: in srcs attribute of cc_library rule @grpc//:grpc_nanopb: please do not import '@grpc//third_party/nanopb:pb_encode.c' directly. You should either move the file to this package or depend on an appropriate rule there. Since this rule was created by the macro 'grpc_generate_one_off_targets', the error might have been caused by the macro implementation in /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/grpc/bazel/grpc_build_system.bzl:172:12
+WARNING: /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/absl_py/WORKSPACE:1: Workspace name in /root/.cache/bazel/_bazel_root/4edac22edaed6e5c666dc31050e98f30/external/absl_py/WORKSPACE (@io_abseil_py) does not match the name given in the repository's definition (@absl_py); this will cause a build error in future versions
+WARNING: /home/penggu/cs263_spring2018/tensorflow/contrib/learn/BUILD:17:1: in py_library rule //tensorflow/contrib/learn:learn: target '//tensorflow/contrib/learn:learn' depends on deprecated target '//tensorflow/contrib/session_bundle:exporter': No longer supported. Switch to SavedModel immediately.
+WARNING: /home/penggu/cs263_spring2018/tensorflow/contrib/learn/BUILD:17:1: in py_library rule //tensorflow/contrib/learn:learn: target '//tensorflow/contrib/learn:learn' depends on deprecated target '//tensorflow/contrib/session_bundle:gc': No longer supported. Switch to SavedModel immediately.
+INFO: Analysed target //tensorflow/tools/pip_package:build_pip_package (0 packages loaded).
+INFO: Found 1 target...
+[0 / 2] [-----] BazelWorkspaceStatusAction stable-status.txt
+[51 / 2,062] Compiling tensorflow/contrib/rnn/kernels/lstm_ops_gpu.cu.cc; 1s local ... (40 actions running)
+[55 / 2,064] Compiling tensorflow/contrib/rnn/kernels/lstm_ops_gpu.cu.cc; 3s local ... (39 actions running)
+[57 / 2,086] Compiling tensorflow/contrib/rnn/kernels/lstm_ops_gpu.cu.cc; 4s local ... (39 actions, 38 running)
+INFO: From Compiling tensorflow/contrib/tensor_forest/kernels/v4/decision_node_evaluator.cc [for host]:
+tensorflow/contrib/tensor_forest/kernels/v4/decision_node_evaluator.cc: In member function 'virtual tensorflow::int32 tensorflow::tensorforest::ObliqueInequalityDecisionNodeEvaluator::Decide(const std::unique_ptr<tensorflow::tensorforest::TensorDataSet>&, int) const':
+tensorflow/contrib/tensor_forest/kernels/v4/decision_node_evaluator.cc:85:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < feature_num_.size(); ++i) {
+                     ^
+INFO: From Compiling tensorflow/contrib/tensor_forest/kernels/v4/leaf_model_operators.cc [for host]:
+In file included from ./tensorflow/contrib/tensor_forest/kernels/v4/leaf_model_operators.h:19:0,
+                 from tensorflow/contrib/tensor_forest/kernels/v4/leaf_model_operators.cc:15:
+./tensorflow/contrib/tensor_forest/kernels/v4/input_target.h: In member function 'virtual float tensorflow::tensorforest::TensorInputTarget::GetTargetWeight(int) const':
+./tensorflow/contrib/tensor_forest/kernels/v4/input_target.h:71:45: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return num_weights > 0 && example_index < num_weights
+                                             ^
+[65 / 2,097] Compiling tensorflow/contrib/rnn/kernels/lstm_ops_gpu.cu.cc; 5s local ... (40 actions, 39 running)
+INFO: From Compiling tensorflow/contrib/tensor_forest/kernels/v4/decision-tree-resource.cc [for host]:
+In file included from ./tensorflow/contrib/tensor_forest/kernels/v4/leaf_model_operators.h:19:0,
+                 from ./tensorflow/contrib/tensor_forest/kernels/v4/decision-tree-resource.h:21,
+                 from tensorflow/contrib/tensor_forest/kernels/v4/decision-tree-resource.cc:15:
+./tensorflow/contrib/tensor_forest/kernels/v4/input_target.h: In member function 'virtual float tensorflow::tensorforest::TensorInputTarget::GetTargetWeight(int) const':
+./tensorflow/contrib/tensor_forest/kernels/v4/input_target.h:71:45: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return num_weights > 0 && example_index < num_weights
+                                             ^
+tensorflow/contrib/tensor_forest/kernels/v4/decision-tree-resource.cc: In member function 'void tensorflow::tensorforest::DecisionTreeResource::SplitNode(tensorflow::int32, tensorflow::tensorforest::SplitCandidate*, std::vector<int>*)':
+tensorflow/contrib/tensor_forest/kernels/v4/decision-tree-resource.cc:77:34: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   while (node_evaluators_.size() <= node_id) {
+                                  ^
+In file included from ./tensorflow/core/lib/strings/strcat.h:27:0,
+                 from ./tensorflow/core/lib/strings/str_util.h:23,
+                 from ./tensorflow/contrib/tensor_forest/kernels/data_spec.h:23,
+                 from ./tensorflow/contrib/tensor_forest/kernels/v4/input_data.h:22,
+                 from ./tensorflow/contrib/tensor_forest/kernels/v4/decision_node_evaluator.h:20,
+                 from ./tensorflow/contrib/tensor_forest/kernels/v4/decision-tree-resource.h:19,
+                 from tensorflow/contrib/tensor_forest/kernels/v4/decision-tree-resource.cc:15:
+./tensorflow/core/util/tensor_format.h: In instantiation of 'T tensorflow::GetTensorDim(tensorflow::gtl::ArraySlice<T>, tensorflow::TensorFormat, char) [with T = long long int]':
+./tensorflow/core/util/tensor_format.h:372:47:   required from here
+./tensorflow/core/util/tensor_format.h:340:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   CHECK(index >= 0 && index < dimension_attributes.size())
+                             ^
+./tensorflow/core/platform/macros.h:83:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/core/util/tensor_format.h:340:3: note: in expansion of macro 'CHECK'
+   CHECK(index >= 0 && index < dimension_attributes.size())
+   ^
+./tensorflow/core/util/tensor_format.h: In instantiation of 'T tensorflow::GetFilterDim(tensorflow::gtl::ArraySlice<T>, tensorflow::FilterTensorFormat, char) [with T = long long int]':
+./tensorflow/core/util/tensor_format.h:381:54:   required from here
+./tensorflow/core/util/tensor_format.h:355:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   CHECK(index >= 0 && index < dimension_attribute.size())
+                             ^
+./tensorflow/core/platform/macros.h:83:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/core/util/tensor_format.h:355:3: note: in expansion of macro 'CHECK'
+   CHECK(index >= 0 && index < dimension_attribute.size())
+   ^
+[186 / 2,246] Compiling tensorflow/contrib/rnn/kernels/lstm_ops_gpu.cu.cc; 6s local ... (39 actions running)
+INFO: From Compiling tensorflow/contrib/tensor_forest/kernels/v4/input_data.cc [for host]:
+tensorflow/contrib/tensor_forest/kernels/v4/input_data.cc: In member function 'void tensorflow::tensorforest::TensorDataSet::RandomSample(int, tensorflow::decision_trees::FeatureId*, float*, int*) const':
+tensorflow/contrib/tensor_forest/kernels/v4/input_data.cc:134:20: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   if (rand_feature < available_features_.size()) {  // it's dense.
+                    ^
+tensorflow/contrib/tensor_forest/kernels/v4/input_data.cc:139:77: warning: 'sparse_input_start' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         sparse_input_start + rand_feature - input_spec_.dense_features_size();
+                                                                             ^
+[192 / 2,247] Compiling tensorflow/contrib/rnn/kernels/lstm_ops_gpu.cu.cc; 7s local ... (40 actions running)
+INFO: From Compiling tensorflow/contrib/boosted_trees/lib/trees/decision_tree.cc [for host]:
+tensorflow/contrib/boosted_trees/lib/trees/decision_tree.cc: In static member function 'static std::vector<int> tensorflow::boosted_trees::trees::DecisionTree::GetChildren(const tensorflow::boosted_trees::trees::TreeNode&)':
+tensorflow/contrib/boosted_trees/lib/trees/decision_tree.cc:206:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+[199 / 2,248] Compiling tensorflow/contrib/rnn/kernels/lstm_ops_gpu.cu.cc; 8s local ... (40 actions running)
+ERROR: /home/penggu/cs263_spring2018/tensorflow/contrib/tensor_forest/BUILD:408:1: Linking of rule '//tensorflow/contrib/tensor_forest:libforestprotos.so' failed (Exit 1)
+bazel-out/host/bin/tensorflow/contrib/tensor_forest/kernels/v4/libdecision_node_evaluator.pic.a(decision_node_evaluator.pic.o):(.bss._ZN10tensorflow12TensorBuffer10buf_tracerE+0x0): multiple definition of `tensorflow::TensorBuffer::buf_tracer'
+bazel-out/host/bin/tensorflow/contrib/tensor_forest/kernels/v4/libdecision-tree-resource_impl.pic.a(decision-tree-resource.pic.o):(.bss._ZN10tensorflow12TensorBuffer10buf_tracerE+0x0): first defined here
+bazel-out/host/bin/tensorflow/contrib/tensor_forest/kernels/v4/libinput_data.pic.a(input_data.pic.o):(.bss._ZN10tensorflow12TensorBuffer10buf_tracerE+0x0): multiple definition of `tensorflow::TensorBuffer::buf_tracer'
+bazel-out/host/bin/tensorflow/contrib/tensor_forest/kernels/v4/libdecision-tree-resource_impl.pic.a(decision-tree-resource.pic.o):(.bss._ZN10tensorflow12TensorBuffer10buf_tracerE+0x0): first defined here
+bazel-out/host/bin/tensorflow/contrib/tensor_forest/libtree_utils.pic.a(tree_utils.pic.o):(.bss._ZN10tensorflow12TensorBuffer10buf_tracerE+0x0): multiple definition of `tensorflow::TensorBuffer::buf_tracer'
+bazel-out/host/bin/tensorflow/contrib/tensor_forest/kernels/v4/libdecision-tree-resource_impl.pic.a(decision-tree-resource.pic.o):(.bss._ZN10tensorflow12TensorBuffer10buf_tracerE+0x0): first defined here
+bazel-out/host/bin/tensorflow/contrib/tensor_forest/kernels/v4/libleaf_model_operators.pic.a(leaf_model_operators.pic.o):(.bss._ZN10tensorflow12TensorBuffer10buf_tracerE+0x0): multiple definition of `tensorflow::TensorBuffer::buf_tracer'
+bazel-out/host/bin/tensorflow/contrib/tensor_forest/kernels/v4/libdecision-tree-resource_impl.pic.a(decision-tree-resource.pic.o):(.bss._ZN10tensorflow12TensorBuffer10buf_tracerE+0x0): first defined here
+collect2: error: ld returned 1 exit status
+Target //tensorflow/tools/pip_package:build_pip_package failed to build
+Use --verbose_failures to see the command lines of failed build steps.
+INFO: Elapsed time: 10.666s, Critical Path: 9.72s
+FAILED: Build did NOT complete successfully
