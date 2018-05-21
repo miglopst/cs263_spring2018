@@ -14,8 +14,17 @@ class RootTracer{
 
   RootTracer();
 
+  // copy constructor
+  RootTracer(const RootTracer<T1, T2> &tmp);
+
   //clean all members
   ~RootTracer();
+
+  // find
+  bool find(T1* root);
+
+  // compare
+  bool compare(RootTracer<T1, T2> tmp);
 
   //Add newtensor to root_set
   void addto_root_set(T1* newtensor);
