@@ -15,7 +15,7 @@ BufTracer<T>::~BufTracer(){}
 template <typename T>
 void BufTracer<T>::addto_buffer_set(T* newbuffer){
   this->buffer_set.insert(newbuffer);
-  if(atoi(std::getenv("DEBUG_FLAG")) == 4){
+  if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 4){
     std::cout << "[buftracer.cc]: A new buffer is added to the buffer set." << std::endl;
   }
 }

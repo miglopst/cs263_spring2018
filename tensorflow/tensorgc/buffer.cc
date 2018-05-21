@@ -7,7 +7,7 @@ namespace tensorflow {
 BufTracer<Buffer> Buffer::buf_tracer = BufTracer<Buffer>();
 
 Buffer::Buffer(){
-  if(atoi(std::getenv("DEBUG_FLAG")) == 2){
+  if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 2){
     std::cout << "[buffer.cc]: Buffer Constructor called" << std::endl;
   }
   buf_tracer.addto_buffer_set(this); 
@@ -15,7 +15,7 @@ Buffer::Buffer(){
 
 
 Buffer::~Buffer(){
-  if(atoi(std::getenv("DEBUG_FLAG")) == 2){
+  if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 2){
     std::cout << "[buffer.cc]: Buffer Deconstructor called" << std::endl;
   }
 }

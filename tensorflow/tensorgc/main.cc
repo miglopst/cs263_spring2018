@@ -85,15 +85,17 @@ void linear_initialization_test(){
 
 
 int main(){
-	if(atoi(std::getenv("DEBUG_FLAG")) != 0){
+	//if(atoi(std::getenv("DEBUG_FLAG")) != 0){
+	if(std::getenv("DEBUG_FLAG") != NULL){
 		std::cout << "debug-"<< atoi(std::getenv("DEBUG_FLAG")) <<" enabled" << std::endl;
 	}
 	else{
 		std::cout << "debug disabled" << std::endl;
 	}
+  std::cout << "running" << std::endl;
 
   //use linear initialization here
-  //linear_initialization_test();
+  linear_initialization_test();
   //use random initialization here
   random_initialization_test();
   return 0;
