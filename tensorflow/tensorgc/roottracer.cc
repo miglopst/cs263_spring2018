@@ -13,7 +13,42 @@ template <typename T1, typename T2>
 RootTracer<T1,T2>::RootTracer(){}
 
 template <typename T1, typename T2>
+RootTracer<T1,T2>::RootTracer(const RootTracer<T1, T2> &tmp){
+    typename std::set<T1*>::iterator tmp_it;
+    for(tmp_it = tmp.root_set.begin(); tmp_it !=tmp.root_set.end(); ++tmp_it){
+        this->addto_root_set(*tmp_it);
+    }
+}
+
+template <typename T1, typename T2>
 RootTracer<T1,T2>::~RootTracer(){}
+
+template <typename T1, typename T2>
+bool RootTracer<T1, T2>::find(T1* root){
+    if(this->root_set.find(root) != this->root_set.end()){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <typename T1, typename T2>
+bool RootTracer<T1, T2>::compare(RootTracer<T1, T2> tmp){
+    if(this->root_set.size() != tmp.root_set.size()){
+        return false;
+    }
+    typename std::set<T1*>::iterator rootset_it;
+    for(rootset_it = root_set.begin(); rootset_it!=root_set.end(); ++rootset_it){
+        typename std::set<T1*>::iterator tmp_rootset_it = tmp.root_set.find(*rootset_it);
+        if(tmp_rootset_it == tmp.root_set.end()){
+            return false;
+        }
+        if((*rootset_it)->getbuf()!= (*tmp_rootset_it)->getbuf()){
+            return false;
+        }
+    }
+    return true;
+}
 
 template <typename T1, typename T2>
 void RootTracer<T1,T2>::addto_root_set(T1* newtensor){
@@ -29,6 +64,11 @@ void RootTracer<T1,T2>::rmfrom_root_set(T1* oldtensor){
     std::cout << "[roottracer.cc]: Tensor removed from rootset, TID = " << oldtensor->getid() << std::endl;
   }
   this->root_set.erase(oldtensor);
+}
+
+template <typename T1, typename T2>
+int RootTracer<T1,T2>::getsize_root_set(){
+    return root_set.size();
 }
 
 template <typename T1, typename T2>

@@ -31,8 +31,8 @@ void random_initialization_test(){
 			tensorset.insert(tensor_temp);
 		}
 		else{
-      //give a random seed
-      std::srand (time(NULL));
+            //give a random seed
+            std::srand (time(NULL));
 			//using copy tensor constructor
 			r_t = std::rand()%tensorset.size()+1;//generate a random number in [1..t_cnt]
 			//std::cout << "set size = " << tensorset.size()  << std::endl;
@@ -48,10 +48,37 @@ void random_initialization_test(){
 			}
 		}
 	}
+  
+  // backup root tracer
+  tensorflow::RootTracer<tensorflow::Tensor, tensorflow::Buffer> backup_tensor_tracer(tensorflow::Tensor::tensor_tracer); 
+  if(backup_tensor_tracer.compare(tensorflow::Tensor::tensor_tracer)) {
+      std::cout << "root set has not changed before tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  } else {
+      std::cout << "root set has changed before tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  }
 
   //start tracing here
   std::set<tensorflow::Buffer*>* tracing_set_ptr = tensorflow::Buffer::buf_tracer.get_tracing_set();
   tensorflow::Tensor::tensor_tracer.start_tracing(tracing_set_ptr);
+
+  // compare whether the root set has changed after tracing
+  if(backup_tensor_tracer.compare(tensorflow::Tensor::tensor_tracer)) {
+      std::cout << "root set has not changed after tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  } else {
+      std::cout << "root set has changed after tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  }
+
+  //using default tensor constructor
+  tensor_temp = new tensorflow::Tensor(t_cnt);
+  tensorset.insert(tensor_temp);
+
+  // compare whether the root set has changed after tracing
+  if(backup_tensor_tracer.compare(tensorflow::Tensor::tensor_tracer)) {
+      std::cout << "root set has not changed after tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  } else {
+      std::cout << "root set has changed after tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  }
+
 }
 
 
@@ -69,9 +96,24 @@ void linear_initialization_test(){
   }
   cp_tensor_temp = new tensorflow::Tensor(NUM_TENSORS, tensor_temp);
 
+  // backup root tracer
+  tensorflow::RootTracer<tensorflow::Tensor, tensorflow::Buffer> backup_tensor_tracer(tensorflow::Tensor::tensor_tracer); 
+  if(backup_tensor_tracer.compare(tensorflow::Tensor::tensor_tracer)) {
+      std::cout << "root set has not changed before tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  } else {
+      std::cout << "root set has changed before tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  }
+
   //start tracing here
   std::set<tensorflow::Buffer*>* tracing_set_ptr = tensorflow::Buffer::buf_tracer.get_tracing_set();
   tensorflow::Tensor::tensor_tracer.start_tracing(tracing_set_ptr);
+
+  // compare whether the root set has changed after tracing
+  if(backup_tensor_tracer.compare(tensorflow::Tensor::tensor_tracer)) {
+      std::cout << "root set has not changed after tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  } else {
+      std::cout << "root set has changed after tracing: " << tensorflow::Tensor::tensor_tracer.getsize_root_set() << std::endl;
+  }
 
   //tensor deallocation test
   for(tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
@@ -95,9 +137,14 @@ int main(){
   std::cout << "running" << std::endl;
 
   //use linear initialization here
+  std::cout << "===start linear initialization ===" << std::endl;
   linear_initialization_test();
-  //use random initialization here
+  std::cout << "===end linear initialization ===" << std::endl;
+  
+  //use random initiatization here
+  std::cout << "===start random initialization ===" << std::endl;
   random_initialization_test();
+  std::cout << "===end random initialization ===" << std::endl;
   return 0;
 }
 

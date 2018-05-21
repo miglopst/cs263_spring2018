@@ -13,8 +13,17 @@ class RootTracer{
 
   RootTracer();
 
+  // copy constructor
+  RootTracer(const RootTracer<T1, T2> &tmp);
+  
   //clean all members
   ~RootTracer();
+  
+  // find
+  bool find(T1* root);
+  
+  // compare
+  bool compare(RootTracer<T1, T2> tmp);
 
   //Add newtensor to root_set
   void addto_root_set(T1* newtensor);
@@ -26,6 +35,8 @@ class RootTracer{
   //All reachable objects traced from root_set is put in the tracing_set
   //All objects added to the root_set must be TensorBuffer objects
   void start_tracing(std::set<T2*>* tracing_set);
+
+  int getsize_root_set();
 
  private:
   //class field members
