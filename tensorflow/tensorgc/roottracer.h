@@ -38,6 +38,8 @@ class RootTracer{
 
   int getsize_root_set();
 
+  int trace_counter; // how often do we call the start_tracing ???
+
  private:
   //class field members
 

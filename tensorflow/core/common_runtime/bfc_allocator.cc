@@ -54,7 +54,7 @@ BFCAllocator::BFCAllocator(SubAllocator* sub_allocator, size_t total_memory,
   // We create bins to fit all possible ranges that cover the
   // memory_limit_ starting from allocations up to 256 bytes to
   // allocations up to (and including) the memory limit.
-  std::cout << "[Peng][bfc_allocator.cc][BFCAllocator] kNumBins = " << kNumBins << std::endl;
+  LOG(ERROR) << "[Peng][bfc_allocator.cc][BFCAllocatorConstructor] kNumBins = " << kNumBins;
   for (BinNum b = 0; b < kNumBins; b++) {
     size_t bin_size = BinNumToSize(b);
     std::cout << "[Peng][bfc_allocator.cc][BFCAllocator] Creating bin of max chunk size " << strings::HumanReadableNumBytes(bin_size) << std::endl;

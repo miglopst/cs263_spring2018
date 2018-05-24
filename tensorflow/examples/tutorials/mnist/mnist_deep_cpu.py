@@ -134,6 +134,7 @@ def main(_):
   y_ = tf.placeholder(tf.int64, [None])
 
   # Build the graph for the deep net
+  #with tf.devcie('CPU'):
   y_conv, keep_prob = deepnn(x)
 
   with tf.name_scope('loss'):
@@ -154,18 +155,25 @@ def main(_):
   train_writer = tf.summary.FileWriter(graph_location)
   train_writer.add_graph(tf.get_default_graph())
 
-  with tf.Session() as sess:
-    sess.run(tf.global_variables_initializer())
-    for i in range(10):
-      batch = mnist.train.next_batch(1000)
-      if i % 1 == 0:
-        train_accuracy = accuracy.eval(feed_dict={
-            x: batch[0], y_: batch[1], keep_prob: 1.0})
-        print('step %d, training accuracy %g' % (i, train_accuracy))
-      train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+  config = tf.ConfigProto( device_count={'GPU': 0},
+          #inter_op_parallelism_threads=16,
+          #intra_op_parallelism_threads=1
+          )
 
-    print('test accuracy %g' % accuracy.eval(feed_dict={
-        x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+  with tf.Session(config=config) as sess:
+  #with tf.Session() as sess:
+    with tf.device('/cpu:0'):
+      sess.run(tf.global_variables_initializer())
+      for i in range(10):
+        batch = mnist.train.next_batch(1000)
+        if i % 1 == 0:
+          train_accuracy = accuracy.eval(feed_dict={
+              x: batch[0], y_: batch[1], keep_prob: 1.0})
+          print('step %d, training accuracy %g' % (i, train_accuracy))
+        train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+
+      print('test accuracy %g' % accuracy.eval(feed_dict={
+          x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()

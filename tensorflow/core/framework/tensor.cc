@@ -616,6 +616,21 @@ Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) {
   set_dtype(type); 
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2";
   Tensor::roottracer.addto_root_set(this);
+  if(Tensor::roottracer.get_trace_counter()>=1000) {
+    // backup root tracer
+    RootTracer<Tensor, TensorBuffer> backup_roottracer(Tensor::roottracer);
+    LOG(ERROR) << "[tianqi]root set before tracing: " << Tensor::roottracer.getsize_root_set();
+    // start tracing here
+    std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
+    Tensor::roottracer.start_tracing(tracing_set_ptr);
+
+    // compare whether the root set has changed after tracing
+    if(backup_roottracer.compare(Tensor::roottracer)) {
+      LOG(ERROR) << "[tianqi]root set has not changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
+    } else {
+      LOG(ERROR) << "[tianqi]root set has changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
+    }
+  }
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
@@ -623,6 +638,21 @@ Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
   set_dtype(type);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 3";
   Tensor::roottracer.addto_root_set(this);
+  if(Tensor::roottracer.get_trace_counter()>=1000) {
+    // backup root tracer
+    RootTracer<Tensor, TensorBuffer> backup_roottracer(Tensor::roottracer);
+    LOG(ERROR) << "[tianqi]root set before tracing: " << Tensor::roottracer.getsize_root_set();
+    // start tracing here
+    std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
+    Tensor::roottracer.start_tracing(tracing_set_ptr);
+
+    // compare whether the root set has changed after tracing
+    if(backup_roottracer.compare(Tensor::roottracer)) {
+      LOG(ERROR) << "[tianqi]root set has not changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
+    } else {
+      LOG(ERROR) << "[tianqi]root set has changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
+    }
+  }
   RefIfNonNull(buf);
 }
 
@@ -758,6 +788,21 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape)
   }
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4";
   Tensor::roottracer.addto_root_set(this);
+  if(Tensor::roottracer.get_trace_counter()>=1000) {
+    // backup root tracer
+    RootTracer<Tensor, TensorBuffer> backup_roottracer(Tensor::roottracer);
+    LOG(ERROR) << "[tianqi]root set before tracing: " << Tensor::roottracer.getsize_root_set();
+    // start tracing here
+    std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
+    Tensor::roottracer.start_tracing(tracing_set_ptr);
+
+    // compare whether the root set has changed after tracing
+    if(backup_roottracer.compare(Tensor::roottracer)) {
+      LOG(ERROR) << "[tianqi]root set has not changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
+    } else {
+      LOG(ERROR) << "[tianqi]root set has changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
+    }
+  }
 }
 
 Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
@@ -775,6 +820,21 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
   }
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5";
   Tensor::roottracer.addto_root_set(this);
+  if(Tensor::roottracer.get_trace_counter()>=1000) {
+    // backup root tracer
+    RootTracer<Tensor, TensorBuffer> backup_roottracer(Tensor::roottracer);
+    LOG(ERROR) << "[tianqi]root set before tracing: " << Tensor::roottracer.getsize_root_set();
+    // start tracing here
+    std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
+    Tensor::roottracer.start_tracing(tracing_set_ptr);
+
+    // compare whether the root set has changed after tracing
+    if(backup_roottracer.compare(Tensor::roottracer)) {
+      LOG(ERROR) << "[tianqi]root set has not changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
+    } else {
+      LOG(ERROR) << "[tianqi]root set has changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
+    }
+  }
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape)

@@ -37,6 +37,10 @@ class RootTracer{
   //All objects added to the root_set must be TensorBuffer objects
   void start_tracing(std::set<T2*>* tracing_set);
 
+  int getsize_root_set();
+
+  int get_trace_counter();
+
  private:
   //class field members
 
@@ -45,6 +49,7 @@ class RootTracer{
   //If an old tensor is deallocated, we use rmfrom_root_set to remove this tensor from this root_set
   //All objects added to the root_set must be Tensor objects
   std::set<T1*> root_set;
+  int trace_counter;
 
 };//end RootTracer class
 

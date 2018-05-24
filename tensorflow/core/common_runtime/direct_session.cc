@@ -501,6 +501,8 @@ Status DirectSession::RunInternal(int64 step_id, const RunOptions& run_options,
     }
   }
 
+    LOG(ERROR) << "[tianqi] inter_op_thread_pool:" << run_options.inter_op_thread_pool();
+
   if (run_options.inter_op_thread_pool() < 0 ||
       run_options.inter_op_thread_pool() >= thread_pools_.size()) {
     run_state.executors_done.Notify();
