@@ -11,7 +11,7 @@ namespace tensorflow {
 //T2 is TensorBuffer
 template <typename T1, typename T2>
 RootTracer<T1,T2>::RootTracer(){
-    trace_counter = 0;
+//    trace_counter = 0;
 }
 
 template <typename T1, typename T2>
@@ -55,7 +55,7 @@ bool RootTracer<T1, T2>::compare(RootTracer<T1, T2> tmp){
 template <typename T1, typename T2>
 void RootTracer<T1,T2>::addto_root_set(T1* newtensor){
   this->root_set.insert(newtensor);
-  trace_counter += 1;
+//  trace_counter += 1;
   if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 3){
     std::cout << "[roottracer.cc]: Tensor inserted into rootset, TID = " << newtensor->getid() << std::endl;
   }
@@ -91,7 +91,7 @@ void RootTracer<T1,T2>::start_tracing(std::set<T2*>* tracing_set){
       }
     }
   }
-  trace_counter = 0;
+//  trace_counter = 0;
 }
 
 //initialization here is very important!
