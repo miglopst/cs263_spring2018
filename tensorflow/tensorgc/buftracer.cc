@@ -43,7 +43,10 @@ int BufTracer<T>::get_thresh(){
 }
 
 template <typename T>
-void BufTracer<T>::mark_mv_garbage_set(){}
+void BufTracer<T>::mark_mv_garbage_set(){
+  std::set<T*>::iterator tracing_set_it;
+  T* temp_buf_ptr;
+}
 
 template <typename T>
 void BufTracer<T>::free_garbage_set(){}
