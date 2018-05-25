@@ -9,7 +9,7 @@ class BufTracer{
  public:
   //class method members
 
-  BufTracer();
+  BufTracer(int tracing_thresh=0);
 
   //clean all members
   ~BufTracer();
@@ -29,6 +29,9 @@ class BufTracer{
 
   std::set<T*>* get_tracing_set();
 
+  int get_tracing_set_size();
+  int get_thresh();
+
  private:
   //All reachable objects traced from root_set is put in the tracing_set
   //All objects added to the root_set must be TensorBuffer objects
@@ -43,6 +46,10 @@ class BufTracer{
   //All unreachable objects during tracing are added to this set
   //All objects added to the root_set must be TensorBuffer objects
   std::set<T*> garbage_set;
+
+  int tracing_set_size;
+
+  int tracing_thresh;
 
 };//end BufTracer class
 

@@ -38,6 +38,12 @@ class RootTracer{
 
   int getsize_root_set();
 
+  void increment_trace_size(int size);
+
+  void clear_trace_size();
+
+  int get_trace_size();
+
   int trace_counter; // how often do we call the start_tracing ???
 
  private:
@@ -48,6 +54,8 @@ class RootTracer{
   //If an old tensor is deallocated, we use rmfrom_root_set to remove this tensor from this root_set
   //All objects added to the root_set must be Tensor objects
   std::set<T1*> root_set;
+
+  int trace_size;
 
 };//end RootTracer class
 

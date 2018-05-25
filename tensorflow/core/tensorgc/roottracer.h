@@ -12,7 +12,7 @@ class RootTracer{
  public:
   //class method members
 
-  RootTracer();
+  RootTracer(int trace_thresh = 0);
 
   // copy constructor
   RootTracer(const RootTracer<T1, T2> &tmp);
@@ -50,6 +50,8 @@ class RootTracer{
   //All objects added to the root_set must be Tensor objects
   std::set<T1*> root_set;
   int trace_counter;
+  int trace_thresh;
+  //int trace_size;
 
 };//end RootTracer class
 

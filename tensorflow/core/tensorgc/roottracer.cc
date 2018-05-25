@@ -9,8 +9,10 @@ namespace tensorflow {
 //T1 is Tensor
 //T2 is TensorBuffer
 template <typename T1, typename T2>
-RootTracer<T1,T2>::RootTracer(){
-    trace_counter = 0;
+RootTracer<T1,T2>::RootTracer(int trace_thresh){
+    this->trace_counter = 0;
+    this->trace_thresh = trace_thresh;
+    //this->tracable_size = 0;
 }
 
 template <typename T1, typename T2>
@@ -55,6 +57,7 @@ template <typename T1, typename T2>
 void RootTracer<T1,T2>::addto_root_set(T1* newtensor){
   root_set.insert(newtensor);
   trace_counter += 1;
+//  tracable_size += newtensor->size();
 }
 
 template <typename T1, typename T2>
