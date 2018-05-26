@@ -120,11 +120,31 @@ void linear_initialization_test(){
   tensorflow::Tensor* tensor_temp;
   tensorflow::Tensor* cp_tensor_temp;
 
+  //allocate NUM_TENSORS tensors linearly
   for(tid=0; tid<NUM_TENSORS; tid++){
     tensor_temp = new tensorflow::Tensor(tid);
     tensorset.insert(tensor_temp);
   }
-  cp_tensor_temp = new tensorflow::Tensor(NUM_TENSORS, tensor_temp);
+
+  //allocate NUM_TENSORS copy-allocated tensors linearly
+  tensorset_it = tensorset.begin();
+  for(tid=0; tid<NUM_TENSORS; tid++){
+    tensor_temp = *tensorset_it;
+    cp_tensor_temp = new tensorflow::Tensor(tid+NUM_TENSORS, tensor_temp);
+    tensorset.insert(cp_tensor_temp);
+    tensorset_it++;
+  }
+
+  //deallocate the first 10 tensors
+  //deallocate the first 10 copy-allocated tensors
+  tid = 1;
+  for (tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
+    if (tid > 0 && tid < 11){
+    }
+    if (tid > NUM_TENSORS && tid < NUM_TENSORS + 11){
+    }
+  }
+
 
   //start tracing here
   std::set<tensorflow::Buffer*>* tracing_set_ptr = tensorflow::Buffer::buf_tracer.get_tracing_set();
