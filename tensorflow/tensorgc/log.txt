@@ -1,0 +1,66 @@
+debug-4 enabled
+===start linear initialization ===
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: A new buffer is added to the buffer set.
+[buftracer.cc]: Buffer, bid = 0 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 1 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 2 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 3 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 4 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 5 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 6 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 7 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 8 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 9 is moved to garbage_set.
+[buftracer.cc]: Buffer, bid = 10 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 11 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 12 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 13 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 14 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 15 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 16 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 17 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 18 can be traced, not moving to garbage_set.
+[buftracer.cc]: Buffer, bid = 19 can be traced, not moving to garbage_set.
+[buftracer.cc]: before remove, buffer set size (total buffers) = 20, memory = 1704
+[buftracer.cc]: A buffer (BID=0) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=1) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=2) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=3) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=4) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=5) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=6) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=7) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=8) is removed from the buffer set.
+[buftracer.cc]: A buffer (BID=9) is removed from the buffer set.
+[buftracer.cc]: after remove, buffer set size (total buffers) = 10, memory = 850
+[buftracer.cc]: garbage_set is going to be freed, size (total buffers) = 10
+[buftracer.cc] trying to delete garbage buffer id =0
+[buftracer.cc] trying to delete garbage buffer id =1
+[buftracer.cc] trying to delete garbage buffer id =2
+[buftracer.cc] trying to delete garbage buffer id =3
+[buftracer.cc] trying to delete garbage buffer id =4
+[buftracer.cc] trying to delete garbage buffer id =5
+[buftracer.cc] trying to delete garbage buffer id =6
+[buftracer.cc] trying to delete garbage buffer id =7
+[buftracer.cc] trying to delete garbage buffer id =8
+[buftracer.cc] trying to delete garbage buffer id =9
+===end linear initialization ===

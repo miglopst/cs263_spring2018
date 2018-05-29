@@ -10,9 +10,7 @@ namespace tensorflow {
 //T1 is Tensor
 //T2 is TensorBuffer
 template <typename T1, typename T2>
-RootTracer<T1,T2>::RootTracer(){
-//    trace_counter = 0;
-}
+RootTracer<T1,T2>::RootTracer(){}
 
 template <typename T1, typename T2>
 RootTracer<T1,T2>::RootTracer(const RootTracer<T1, T2> &tmp){
@@ -93,6 +91,9 @@ void RootTracer<T1,T2>::start_tracing(std::set<T2*>* tracing_set){
     tensor_temp = *rootset_it;
     if ( tracing_set->find(tensor_temp->getbuf()) != tracing_set->end()){
       //this buffer is added to the tracing_set. do nothing      
+      if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 3){
+        std::cout << "[roottracer.cc]: Buffer ID (" << tensor_temp->getbuf()->getid() <<") refered by tensor ID (" << tensor_temp->getid()<< ") is already in the tracing set"<< std::endl;
+      }
     }
     else{
       //this buffer is not in the tracing set, and can be reached. add it to the tracing set.
@@ -102,8 +103,9 @@ void RootTracer<T1,T2>::start_tracing(std::set<T2*>* tracing_set){
       }
     }
   }
-  std::cout << "root set size = " << root_set.size() << ", tracing set size = " << tracing_set->size() << std::endl;
-//  trace_counter = 0;
+  if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 3){
+    std::cout << "[roottracer.cc]: root set size (total traceble tensors) = " << root_set.size() << ", tracing set size (total traceble buffers) = " << tracing_set->size() << std::endl;
+  }
 }
 
 //initialization here is very important!

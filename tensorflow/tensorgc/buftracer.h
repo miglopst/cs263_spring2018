@@ -51,7 +51,7 @@ class BufTracer{
   //All objects added to the root_set must be TensorBuffer objects
   std::set<T*> garbage_set;
   
-  int tracing_set_size;
+  int buffer_set_size;
   
   int tracing_thresh;
 

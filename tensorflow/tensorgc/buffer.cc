@@ -1,18 +1,18 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
+#include <math.h>
 #include "buffer.h"
 
 namespace tensorflow {
 
-BufTracer<Buffer> Buffer::buf_tracer = BufTracer<Buffer>();
+BufTracer<Buffer> Buffer::buf_tracer = BufTracer<Buffer>(1024);
 
 Buffer::Buffer(){
-  std::srand (time(NULL));
-  field = std::rand()%1024+1;
+  field = pow(2.0, std::rand()%10);
   buf_ = new int[field];
   buf_tracer.addto_buffer_set(this); 
-  if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 5){
+  if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 2){
     std::cout << "[buffer.cc]: Buffer Constructor called: size=" << getfield() <<std::endl;
   }
 }
@@ -20,7 +20,7 @@ Buffer::Buffer(){
 
 Buffer::~Buffer(){
   if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 2){
-    std::cout << "[buffer.cc]: Buffer Deconstructor called" << std::endl;
+    std::cout << "[buffer.cc]: Buffer Deconstructor called, BID = " << this->getid() << std::endl;
   }
   delete [] buf_;
   buf_ = NULL;
