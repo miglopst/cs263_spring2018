@@ -22,6 +22,7 @@ class Buffer{
  private:
   int id;
   int field;
+  int* buf_;
 };
 
 }// namespace tensorflow

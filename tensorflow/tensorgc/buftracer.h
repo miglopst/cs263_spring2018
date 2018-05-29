@@ -10,7 +10,7 @@ class BufTracer{
  public:
   //class method members
 
-  BufTracer(int thresh = 4096);
+  BufTracer(int thresh = 1024);
 
   //clean all members
   ~BufTracer();
@@ -30,6 +30,8 @@ class BufTracer{
   std::set<T*>* get_tracing_set();
 
   int get_tracing_set_size();
+
+  int get_buffer_set_size();
   
   int get_thresh();
 

@@ -21,6 +21,7 @@ class RootTracer{
   
   // find
   bool find(T1* root);
+  bool find_by_id(int id);
   
   // compare
   bool compare(RootTracer<T1, T2> tmp);

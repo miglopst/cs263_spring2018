@@ -9,7 +9,6 @@
 #define NUM_TENSORS 10
 //we should not have tensorflow namespace here!!
 
-
 void random_initialization_test(){
   //this test creats a number of tensors and initializes them with new allocated buffers, or share buffers with previous tensors
   //set total number of tensors to be initialized
@@ -36,24 +35,25 @@ void random_initialization_test(){
   //copy constructor tensot reference
   tensorflow::Tensor* cp_tensor_temp;
 
+  std::srand (time(NULL));
   for(t_cnt=1; t_cnt < num_random_t+1; ++t_cnt){
+    std::cout << "========rnd:" << t_cnt << std::endl;
     if (t_cnt>1){
       //for the later tensors, we randomly use default (r=0), or copy constructor (r=1).
-      std::srand (time(NULL));
       r = std::rand()%2;//generate a random number in [0,1]
     }
     else {
       //for the first tensor, we must use the default tensor constructor
       r = 0;
     }
+
+    // step 1: allocate/copy a tensor
     if (r==0){
       //using default tensor constructor
       tensor_temp = new tensorflow::Tensor(t_cnt);
       tensorset.insert(tensor_temp);
     }
     else {
-      //give a random seed
-      std::srand (time(NULL));
       //using copy tensor constructor
       //select a previous tensor index to initialize the new tensor
       r_t = std::rand()%tensorset.size()+1;//generate a random number in [1..t_cnt]
@@ -67,36 +67,39 @@ void random_initialization_test(){
         }
       }
     }
+    std::cout << "step1 finished: allocate/copy a tensor" << std::endl;
     //the new tensor has been added to tensorset
 
-    //decide if we want to deallocate some tensors this iteration
+    // step2: decide if we want to deallocate some tensors this iteration
     d = std::rand()%2;//generate a random number in [0,1]
     if (d==1){
       //deallocate a previous tensor this round
       //give a random seed
-      if (t_cnt>20) {
-        //we only deallocate tensor only if there are already 20 tensors allocated
-        std::srand (time(NULL));
+      if (tensorset.size()>20) {
+        //we only deallocate tensor only if there are still 20 tensors alive
+        //std::srand (time(NULL));
         d_t = std::rand()%tensorset.size()+1;//generate a random number in [1..t_cnt]
-	while (tensor_dealloc.find(d_t) != tensor_dealloc.end()){
-	  //this tensor index has already been deallocated!
-	  std::srand (time(NULL));
-	  d_t = std::rand()%tensorset.size()+1;//generate a random number in [1..t_cnt]
-	}
-	//insert into deallocation set
-	tensor_dealloc.insert(d_t);
-	for(tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
-	  d_t--;
-	  if (d_t==0){
-	    tensor_temp = *tensorset_it;
-	    std::cout << "[main.cc]: deallocate tensor, tid = " << tensor_temp->getid() << std::endl;
-	    delete tensor_temp;
-	  }
-	}
+	    //insert into deallocation set
+	    tensor_dealloc.insert(d_t);
+        std::cout << "[main.cc] before dealloc a tensor: " << tensorset.size() << std::endl;
+    	for(tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
+            d_t--;
+            if (d_t==0){
+                tensor_temp = *tensorset_it;
+                tensorset.erase(tensor_temp);
+                std::cout << "[main.cc]: deallocate tensor, tid = " << tensor_temp->getid() << std::endl;
+                delete tensor_temp;
+                tensor_temp = NULL;
+                break;
+            }
+        }
+        std::cout << "[main.cc] after dealloc a tensor: " << tensorset.size() << std::endl;
       }
     }
+    std::cout << "step2 finished: deallocate a tensor or not: "<< d << std::endl;
 
-    //check if the buffer size overflows?
+    // step3: check if the buffer size overflows? Then gc or not
+    std::cout << tensorflow::Buffer::buf_tracer.get_tracing_set_size() << std::endl;
     if(tensorflow::Buffer::buf_tracer.get_tracing_set_size()>tensorflow::Buffer::buf_tracer.get_thresh()){    
       //get reference for BufTracer::tracing_set
       std::set<tensorflow::Buffer*>* tracing_set_ptr = tensorflow::Buffer::buf_tracer.get_tracing_set();
@@ -108,7 +111,24 @@ void random_initialization_test(){
       //clean all garbage
       tensorflow::Buffer::buf_tracer.free_garbage_set();
     }
+    std::cout << "step3 finished: garbage collect or not" << std::endl;
   }
+
+  std::cout << "tensor set size="<<tensorset.size() << std::endl;
+  for(tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
+      tensor_temp = *tensorset_it;
+      delete tensor_temp;
+  }
+  //get reference for BufTracer::tracing_set
+  std::set<tensorflow::Buffer*>* tracing_set_ptr = tensorflow::Buffer::buf_tracer.get_tracing_set();
+  //start tracing
+  //put all reacheable object to tracing_set_ptr
+  tensorflow::Tensor::tensor_tracer.start_tracing(tracing_set_ptr);
+  //mark garbage and move
+  tensorflow::Buffer::buf_tracer.mark_mv_garbage_set();
+  //clean all garbage
+  tensorflow::Buffer::buf_tracer.free_garbage_set();
+
 }
 
 

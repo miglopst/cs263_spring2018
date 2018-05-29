@@ -35,6 +35,17 @@ bool RootTracer<T1, T2>::find(T1* root){
 }
 
 template <typename T1, typename T2>
+bool RootTracer<T1, T2>::find_by_id(int id){
+   typename std::set<T1*>::iterator it;
+   for(it = root_set.begin(); it!= root_set.end(); ++it){
+       if(id == (*it)->getid()){
+           return true;
+       }
+   }
+   return false;
+}
+
+template <typename T1, typename T2>
 bool RootTracer<T1, T2>::compare(RootTracer<T1, T2> tmp){
     if(this->root_set.size() != tmp.root_set.size()){
         return false;
@@ -91,6 +102,7 @@ void RootTracer<T1,T2>::start_tracing(std::set<T2*>* tracing_set){
       }
     }
   }
+  std::cout << "root set size = " << root_set.size() << ", tracing set size = " << tracing_set->size() << std::endl;
 //  trace_counter = 0;
 }
 
