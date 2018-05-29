@@ -761,7 +761,7 @@ Status OpKernelContext::allocate_persistent(DataType type,
     // [tianqi] track allocation begin
     Allocator* a = get_allocator(attr);
     int64 alloc_size = a->AllocatedSize(const_cast<char*>((*out_tensor)->tensor_data().data()));
-    std::cout << "[tianqi] core/framework/op_kernel.cc: allocate_persistent-" << alloc_size << std::endl;
+    //std::cout << "[tianqi] core/framework/op_kernel.cc: allocate_persistent-" << alloc_size << std::endl;
     // [tianqi] track allocation end
   }
   return s;

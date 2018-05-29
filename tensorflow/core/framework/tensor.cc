@@ -1,11 +1,8 @@
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -440,7 +437,7 @@ Buffer<T>::Buffer(Allocator* a, int64 n)
     : BufferBase(a), data_(a->Allocate<T>(n)), elem_(n) {
   //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1" << std::endl;
   TensorBuffer::buf_tracer.addto_buffer_set(this);
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1: size="<<TensorBuffer::buf_tracer.get_tracing_set_size();
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
 }
 
 template <typename T>
@@ -449,7 +446,7 @@ Buffer<T>::Buffer(Allocator* a, int64 n,
     : BufferBase(a), data_(a->Allocate<T>(n, allocation_attr)), elem_(n) {
   //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2" << std::endl;
   TensorBuffer::buf_tracer.addto_buffer_set(this);
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2: size="<<TensorBuffer::buf_tracer.get_tracing_set_size();
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
 }
 
 template <typename T>
@@ -459,7 +456,7 @@ Buffer<T>::~Buffer() {
       RecordDeallocation();
     }
     TensorBuffer::buf_tracer.rmfrom_buffer_set(this);
-    LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:~Buffer()";
+    LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:~Buffer(): size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
     alloc_->Deallocate<T>(data_, elem_);
   }
 }
@@ -608,56 +605,46 @@ void UnrefIfNonNull(core::RefCounted* buf) {
 
 Tensor::Tensor() : Tensor(DT_FLOAT) {
   //calls constructor 2
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 1 (default)";
+  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 1 (default)";
   //Tensor::roottracer.addto_root_set(this);
 }
 
 Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) { 
   set_dtype(type); 
+  /*
   if (buf_ != nullptr)
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2: size=" << this->buf_->size();
   else
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2: size=0";
-  Tensor::roottracer.addto_root_set(this);
-  if(TensorBuffer::buf_tracer.get_tracing_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
-    // backup root tracer
-    RootTracer<Tensor, TensorBuffer> backup_roottracer(Tensor::roottracer);
-    LOG(ERROR) << "[tianqi]root set before tracing: " << Tensor::roottracer.getsize_root_set();
+  */
+  Tensor::roottracer.addto_root_set(this); 
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-
-    // compare whether the root set has changed after tracing
-    if(backup_roottracer.compare(Tensor::roottracer)) {
-      LOG(ERROR) << "[tianqi]root set has not changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
-    } else {
-      LOG(ERROR) << "[tianqi]root set has changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
-    }
+    TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    TensorBuffer::buf_tracer.free_garbage_set();
   }
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
     : shape_(shape), buf_(buf) {
   set_dtype(type);
+  /*
   if (buf_ != nullptr) {
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 3: size=" << this->buf_->size();
   }  else
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 3: size=0";
+  */
   Tensor::roottracer.addto_root_set(this);
-  if(TensorBuffer::buf_tracer.get_tracing_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
-    // backup root tracer
-    RootTracer<Tensor, TensorBuffer> backup_roottracer(Tensor::roottracer);
-    LOG(ERROR) << "[tianqi]root set before tracing: " << Tensor::roottracer.getsize_root_set();
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 3: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-
-    // compare whether the root set has changed after tracing
-    if(backup_roottracer.compare(Tensor::roottracer)) {
-      LOG(ERROR) << "[tianqi]root set has not changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
-    } else {
-      LOG(ERROR) << "[tianqi]root set has changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
-    }
+    TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    TensorBuffer::buf_tracer.free_garbage_set();
   }
   RefIfNonNull(buf);
 }
@@ -691,7 +678,7 @@ void Tensor::CheckIsAlignedAndSingleElement() const {
 
 Tensor::~Tensor() {
   //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor" << std::endl;
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor";
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
   Tensor::roottracer.rmfrom_root_set(this);
   UnrefIfNonNull(buf_);
 }
@@ -792,26 +779,20 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape)
     LogMemory::RecordTensorAllocation("Unknown", LogMemory::UNKNOWN_STEP_ID,
                                       *this);
   }
+  /*
   if (buf_ != nullptr)
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4: size=" << this->buf_->size();
   else
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4: size=0";
-
+  */
   Tensor::roottracer.addto_root_set(this);
-  if(TensorBuffer::buf_tracer.get_tracing_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
-    // backup root tracer
-    RootTracer<Tensor, TensorBuffer> backup_roottracer(Tensor::roottracer);
-    LOG(ERROR) << "[tianqi]root set before tracing: " << Tensor::roottracer.getsize_root_set();
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-
-    // compare whether the root set has changed after tracing
-    if(backup_roottracer.compare(Tensor::roottracer)) {
-      LOG(ERROR) << "[tianqi]root set has not changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
-    } else {
-      LOG(ERROR) << "[tianqi]root set has changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
-    }
+    TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    TensorBuffer::buf_tracer.free_garbage_set();
   }
 }
 
@@ -828,32 +809,27 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
     LogMemory::RecordTensorAllocation("Unknown (with attributes)",
                                       LogMemory::UNKNOWN_STEP_ID, *this);
   }
+  /*
   if (buf_ != nullptr)
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5: size=" << this->buf_->size();
   else
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5: size=0";
+  */
   Tensor::roottracer.addto_root_set(this);
-  if(TensorBuffer::buf_tracer.get_tracing_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
-    // backup root tracer
-    RootTracer<Tensor, TensorBuffer> backup_roottracer(Tensor::roottracer);
-    LOG(ERROR) << "[tianqi]root set before tracing: " << Tensor::roottracer.getsize_root_set();
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-
-    // compare whether the root set has changed after tracing
-    if(backup_roottracer.compare(Tensor::roottracer)) {
-      LOG(ERROR) << "[tianqi]root set has not changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
-    } else {
-      LOG(ERROR) << "[tianqi]root set has changed after tracing: " << Tensor::roottracer.getsize_root_set() ;
-    }
+    TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    TensorBuffer::buf_tracer.free_garbage_set();
   }
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape)
     : Tensor(cpu_allocator(), type, shape) {
   //calls tensor constructor 4
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 6";
+  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 6";
   //Tensor::roottracer.addto_root_set(this);
 }
 
@@ -863,7 +839,7 @@ class SubBuffer : public TensorBuffer {
   // This buffer is an alias to buf[delta, delta + n).
   SubBuffer(TensorBuffer* buf, int64 delta, int64 n)
       : root_(buf->root_buffer()), data_(buf->base<T>() + delta), elem_(n) {
-    std::cout << "[Peng]tensorflow/core/framework/tensor.cc:SubBuffer()" << std::endl;
+    //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:SubBuffer()" << std::endl;
     // Sanity check. The caller should ensure the sub buffer is valid.
     CHECK_LE(root_->base<T>(), this->base<T>());
     T* root_limit = root_->base<T>() + root_->size() / sizeof(T);

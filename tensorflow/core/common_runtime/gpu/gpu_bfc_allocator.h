@@ -62,7 +62,7 @@ class GPUMemAllocator : public SubAllocator {
     // <tianqi> It seems like that it firsts allocate nearly the whole device mem;
     // <tianqi> and then assign the mem for each node/edge. 
     // <tianqi> We need to trace where the ptr return to.
-    std::cout << "[tianqi] core/common_runtime/gpu/gpu_bfc_allocator.h" << num_bytes << std::endl;
+    std::cout << "[tianqi][core/common_runtime/gpu/gpu_bfc_allocator.h]: allocate " << num_bytes << std::endl;
     void* ptr = nullptr;
     if (num_bytes > 0) {
       ptr = stream_exec_->AllocateArray<char>(num_bytes).opaque();

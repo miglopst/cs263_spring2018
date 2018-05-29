@@ -275,7 +275,7 @@ class NumpyTensorBuffer : public TensorBuffer {
  public:
   NumpyTensorBuffer(PyArrayObject* array, size_t len, void* data)
       : array_(array), len_(len), data_(data) {
-    std::cout << "[Peng]tensorflow/python/lib/core/py_func.cc:NumpyTensorBuffer()" << std::endl;
+    //std::cout << "[Peng]tensorflow/python/lib/core/py_func.cc:NumpyTensorBuffer()" << std::endl;
   }
 
   ~NumpyTensorBuffer() override {

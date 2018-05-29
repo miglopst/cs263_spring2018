@@ -54,10 +54,10 @@ BFCAllocator::BFCAllocator(SubAllocator* sub_allocator, size_t total_memory,
   // We create bins to fit all possible ranges that cover the
   // memory_limit_ starting from allocations up to 256 bytes to
   // allocations up to (and including) the memory limit.
-  LOG(ERROR) << "[Peng][bfc_allocator.cc][BFCAllocatorConstructor] kNumBins = " << kNumBins;
+  //LOG(ERROR) << "[Peng][bfc_allocator.cc][BFCAllocatorConstructor] kNumBins = " << kNumBins;
   for (BinNum b = 0; b < kNumBins; b++) {
     size_t bin_size = BinNumToSize(b);
-    std::cout << "[Peng][bfc_allocator.cc][BFCAllocator] Creating bin of max chunk size " << strings::HumanReadableNumBytes(bin_size) << std::endl;
+    //std::cout << "[Peng][bfc_allocator.cc][BFCAllocator] Creating bin of max chunk size " << strings::HumanReadableNumBytes(bin_size) << std::endl;
     VLOG(1) << "Creating bin of max chunk size "
             << strings::HumanReadableNumBytes(bin_size);
     new (BinFromIndex(b)) Bin(this, bin_size);
@@ -193,7 +193,7 @@ void BFCAllocator::DeallocateChunk(ChunkHandle h) {
 
 void* BFCAllocator::AllocateRaw(size_t unused_alignment, size_t num_bytes) {
   // Fast path: Try once to allocate without getting the retry_helper_ involved
-  std::cout << "[Peng][bfc_allocator.cc]-allocate-" << num_bytes << "-bytes"<< std::endl;
+  std::cout << "[Peng][bfc_allocator.cc]-AllocateRaw-" << num_bytes << "-bytes"<< std::endl;
   void* r = AllocateRawInternal(unused_alignment, num_bytes, false);
   if (r != nullptr) {
     return r;
@@ -334,8 +334,8 @@ void* BFCAllocator::FindChunkPtr(BinNum bin_num, size_t rounded_bytes,
           LOG(INFO) << "A: " << RenderOccupancy();
         }
         if (chunk->ptr != nullptr){
-          std::cout << "[Peng][bfc_allocator.cc]-bytes_in_use" << stats_.bytes_in_use << "-bytes"<< std::endl;
-          std::cout << "[Peng][bfc_allocator.cc]-actual_allocate" << chunk->size << "-bytes"<< std::endl;
+          std::cout << "[Peng][bfc_allocator.cc]-bytes_in_use(after AllocateRaw)" << stats_.bytes_in_use << "-bytes"<< std::endl;
+          std::cout << "[Peng][bfc_allocator.cc]-actual_allocate(after AllocateRaw)" << chunk->size << "-bytes"<< std::endl;
         }
         return chunk->ptr;
       }
@@ -474,13 +474,13 @@ void BFCAllocator::RemoveFreeChunkFromBin(BFCAllocator::ChunkHandle h) {
 void BFCAllocator::FreeAndMaybeCoalesce(BFCAllocator::ChunkHandle h) {
   Chunk* c = ChunkFromHandle(h);
   CHECK(c->in_use() && (c->bin_num == kInvalidBinNum));
-  std::cout << "[Peng][bfc_allocator.cc][FreeAndMaybeCoalesce]-deallocate-" << c->size << "-bytes" << std::endl;
+  std::cout << "[Peng][bfc_allocator.cc][FreeAndMaybeCoalesce]-deallocate(DeallocateRaw)-" << c->size << "-bytes" << std::endl;
   // Mark the chunk as no longer in use
   c->allocation_id = -1;
 
   // Updates the stats.
   stats_.bytes_in_use -= c->size;
-  std::cout << "[Peng][bfc_allocator.cc][FreeAndMaybeCoalesce]-bytes_in_use-" << stats_.bytes_in_use << "-bytes" << std::endl;
+  std::cout << "[Peng][bfc_allocator.cc][FreeAndMaybeCoalesce]-bytes_in_use(after DeallocateRaw)-" << stats_.bytes_in_use << "-bytes" << std::endl;
 
   // This chunk is no longer in-use, consider coalescing the chunk
   // with adjacent chunks.

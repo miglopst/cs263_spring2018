@@ -109,7 +109,7 @@ class Allocator {
   // allocation.
   template <typename T>
   T* Allocate(size_t num_elements) {
-    std::cout << "[Peng]tensorflow/core/framework/allocator.h:Allocate,allocate " << (sizeof(T) * num_elements) << "bytes" << std::endl;
+    std::cout << "[Peng][tensorflow/core/framework/allocator.h]:Allocate,allocate " << (sizeof(T) * num_elements) << "bytes" << std::endl;
     return Allocate<T>(num_elements, AllocationAttributes());
   }
 
@@ -133,7 +133,7 @@ class Allocator {
   template <typename T>
   void Deallocate(T* ptr, size_t num_elements) {
     if (ptr) {
-      std::cout << "[Peng]tensorflow/core/framework/allocator.h:Deallocate(),deallocate " << (sizeof(T) * num_elements) << "bytes" << std::endl;
+      std::cout << "[Peng][tensorflow/core/framework/allocator.h]:Deallocate(),deallocate " << (sizeof(T) * num_elements) << "bytes" << std::endl;
       RunDtor<T>(ptr, num_elements);
       DeallocateRaw(ptr);
     }

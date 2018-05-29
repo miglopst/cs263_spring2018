@@ -119,7 +119,7 @@ Allocator* ProcessState::GetGPUAllocator(const GPUOptions& options,
   }
 
   if (gpu_allocators_[tf_gpu_id.value()] == nullptr) {
-    std::cout << "[Peng] Allocating VisitableAllocator" << std::endl;
+    //std::cout << "[Peng] Allocating VisitableAllocator" << std::endl;
     VisitableAllocator* gpu_allocator;
 
     // Validate allocator types.
@@ -132,22 +132,22 @@ Allocator* ProcessState::GetGPUAllocator(const GPUOptions& options,
     gpu_allocator =
         new GPUBFCAllocator(cuda_gpu_id, total_bytes, options,
                             strings::StrCat("GPU_", tf_gpu_id.value(), "_bfc"));
-    std::cout << "[Peng] Using GPUBFCAllocator" << std::endl;
-    std::cout << "-----  total_bytes = " << total_bytes << std::endl;
-    std::cout << "-----  allocator_type = " << options.allocator_type() << std::endl;
-    std::cout << "-----  allocator_name = " << strings::StrCat("GPU_", tf_gpu_id.value(), "_bfc") << std::endl;
-    std::cout << "-----  allow_growth_option = " <<  options.allow_growth() << std::endl;
+    //std::cout << "[Peng] Using GPUBFCAllocator" << std::endl;
+    //std::cout << "-----  total_bytes = " << total_bytes << std::endl;
+    //std::cout << "-----  allocator_type = " << options.allocator_type() << std::endl;
+    //std::cout << "-----  allocator_name = " << strings::StrCat("GPU_", tf_gpu_id.value(), "_bfc") << std::endl;
+    //std::cout << "-----  allow_growth_option = " <<  options.allow_growth() << std::endl;
     // If true, checks for memory overwrites by writing
     // distinctive patterns on both ends of allocated memory.
     if (useCudaMemoryGuardAllocator()) {
-      std::cout << "[Peng] useCudaMemoryGuardAllocator" << std::endl;
+      //std::cout << "[Peng] useCudaMemoryGuardAllocator" << std::endl;
       gpu_allocator = new GPUDebugAllocator(gpu_allocator, cuda_gpu_id);
       gpu_allocator = new GPUNanResetAllocator(gpu_allocator, cuda_gpu_id);
     } else if (useCudaMallocAllocator()) {
       // If true, passes all allocation requests through to cudaMalloc
       // useful for doing memory debugging with tools like cuda-memcheck
       // **WARNING** probably will not work in a multi-gpu scenario
-      std::cout << "[Peng] useCudaMallocAllocator" << std::endl;
+      //std::cout << "[Peng] useCudaMallocAllocator" << std::endl;
       gpu_allocator = new GPUcudaMallocAllocator(gpu_allocator, cuda_gpu_id);
     }
     gpu_allocators_[tf_gpu_id.value()] = gpu_allocator;
@@ -159,12 +159,12 @@ Allocator* ProcessState::GetGPUAllocator(const GPUOptions& options,
     int bus_id = se->GetDeviceDescription().numa_node();
     if (bus_id >= 0 && bus_id < static_cast<int64>(gpu_visitors_.size())) {
       for (const auto& v : gpu_visitors_[bus_id]) {
-        std::cout << "[Peng] add pending AllocVisitors for this bus" << std::endl;
+        //std::cout << "[Peng] add pending AllocVisitors for this bus" << std::endl;
         gpu_allocator->AddAllocVisitor(v);
       }
     }
     if (FLAGS_brain_gpu_record_mem_types) {
-      std::cout << "[Peng] FLAGS_brain_gpu_record_mem_types is set" << std::endl;
+      //std::cout << "[Peng] FLAGS_brain_gpu_record_mem_types is set" << std::endl;
       MemDesc md;
       md.loc = MemDesc::GPU;
       md.dev_index = cuda_gpu_id.value();

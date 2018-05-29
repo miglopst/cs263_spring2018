@@ -389,7 +389,7 @@ const Edge* Graph::AddEdge(Node* source, int x, Node* dest, int y) {
   Edge* e = nullptr;
   // <tianqi> It seems that it only allocate the metadata mem for Edge 
   // <tianqi> when building the compute graph. 
-  std::cout << "[tianqi] core/graph/graph.cc" << sizeof(Edge) << std::endl; 
+  //std::cout << "[tianqi] core/graph/graph.cc" << sizeof(Edge) << std::endl; 
 
   if (free_edges_.empty()) {
     e = new (arena_.Alloc(sizeof(Edge))) Edge;  // placement new
@@ -647,7 +647,7 @@ Node* Graph::AllocateNode(std::shared_ptr<NodeProperties> props,
                           const Node* cost_node) {
   // <tianqi> It seems that it only allocate the metadata mem for Node
   // <tianqi> when building the compute graph. 
-  std::cout << "[tianqi] core/graph/graph.cc" << sizeof(Node) << std::endl; 
+  //std::cout << "[tianqi] core/graph/graph.cc" << sizeof(Node) << std::endl; 
   Node* node = nullptr;
   if (free_nodes_.empty()) {
     node = new (arena_.Alloc(sizeof(Node))) Node;  // placement new

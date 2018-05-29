@@ -158,7 +158,7 @@ void* allocate_tensor(const char* operation, size_t len) {
   // <tianqi> It seems that the AllocateRaw function is called here 
   // <tianqi> to allocate CPU mem for input image & label. 
   // <tianqi> len is exactly the size of every batch of input, label tuple.
-  std::cout << "[tianqi] c/c_api.cc:" << len << std::endl;
+  //std::cout << "[tianqi] c/c_api.cc:" << len << std::endl;
   void* data =
       tensorflow::cpu_allocator()->AllocateRaw(EIGEN_MAX_ALIGN_BYTES, len);
   if (tensorflow::LogMemory::IsEnabled() && data != nullptr) {

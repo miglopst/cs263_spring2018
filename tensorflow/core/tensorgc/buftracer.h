@@ -9,7 +9,8 @@ class BufTracer{
  public:
   //class method members
 
-  BufTracer(int tracing_thresh=0);
+  //default threshold = 300MB
+  BufTracer(int tracing_thresh = 300*1024*1024);
 
   //clean all members
   ~BufTracer();
@@ -29,7 +30,7 @@ class BufTracer{
 
   std::set<T*>* get_tracing_set();
 
-  int get_tracing_set_size();
+  int get_buffer_set_size();
   int get_thresh();
 
  private:
@@ -47,7 +48,7 @@ class BufTracer{
   //All objects added to the root_set must be TensorBuffer objects
   std::set<T*> garbage_set;
 
-  int tracing_set_size;
+  int buffer_set_size;
 
   int tracing_thresh;
 

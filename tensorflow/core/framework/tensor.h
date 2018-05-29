@@ -1,11 +1,8 @@
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -595,20 +592,16 @@ class BufferBase : public TensorBuffer {
   void RecordDeallocation();
   Allocator* const alloc_;
 };
-
 template <typename T>
 class Buffer : public BufferBase {
  public:
   Buffer(Allocator* a, int64 n);
   Buffer(Allocator* a, int64 n, const AllocationAttributes& allocation_attr);
-
   void* data() const override;
   size_t size() const override;
-
  private:
   T* data_;
   int64 elem_;
-
   ~Buffer() override;
    TF_DISALLOW_COPY_AND_ASSIGN(Buffer);
 };
@@ -820,13 +813,15 @@ typename TTypes<T, NDIMS>::ConstTensor Tensor::flat_inner_outer_dims(
 inline Tensor::Tensor(const Tensor& other)
     : shape_(other.shape()), buf_(other.buf_) {
   if (buf_) buf_->Ref();
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor copy constructor";
+  //Tensor::roottracer.addto_root_set(this);
+  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor copy constructor";
 }
 
 inline Tensor::Tensor(Tensor&& other)
     : shape_(std::move(other.shape())), buf_(other.buf_) {
   other.buf_ = nullptr;
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor move constructor";
+  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor move constructor";
+  //Tensor::roottracer.addto_root_set(this);
 }
 
 inline Tensor& Tensor::operator=(Tensor&& other) {

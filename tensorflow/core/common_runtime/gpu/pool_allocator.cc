@@ -95,7 +95,7 @@ void* PoolAllocator::AllocateRaw(size_t alignment, size_t num_bytes) {
   // <tianqi> This is a very important one.
   // <tianqi> It will be called interleavingly together with Peng's BFC_allocator log
   // <tianqi> We need to find out who calls it.
-  std::cout << "[tianqi]core/common_runtime/gpu/pool_allocator.cc:PoolAllocator" <<num_bytes <<std::endl;
+  std::cout << "[tianqi][core/common_runtime/gpu/pool_allocator.cc]:-PoolAllocator-AllocateRaw-" <<num_bytes <<std::endl;
   if (!allocation_begun_) allocation_begun_ = true;
   if (num_bytes == 0) return nullptr;
 
