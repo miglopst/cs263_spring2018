@@ -83,7 +83,7 @@ void BufTracer<T>::mark_mv_garbage_set(){
     }
   }
   else{
-    if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 4){
+    if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 0){
       std::cout << "[buftracer.cc]: no garbage can be collected." << std::endl;
     }
   }

@@ -6,7 +6,7 @@
 
 #include "tensor.h"
 
-#define NUM_TENSORS 20
+#define NUM_TENSORS 40
 //we should not have tensorflow namespace here!!
 
 void random_initialization_test(){
@@ -27,18 +27,18 @@ void random_initialization_test(){
   std::set<tensorflow::Tensor*> tensorset;
   std::set<tensorflow::Tensor*>::iterator tensorset_it;
 
-  //this set contains all tensor index that have been deallocated
-  std::set<int> tensor_dealloc;
+  //if d=1, how many tensors will be deallocated this round
+  int d_num = 3;
 
   //temporary tensor reference
   tensorflow::Tensor* tensor_temp;
   //copy constructor tensot reference
   tensorflow::Tensor* cp_tensor_temp;
 
+  //give a random seed
   std::srand (time(NULL));
 
   for(t_cnt=1; t_cnt < num_random_t+1; ++t_cnt){
-    std::cout << "[main.cc]: ========rnd:" << t_cnt << std::endl;
     if (t_cnt>1){
       //for the later tensors, we randomly use default (r=0), or copy constructor (r=1).
       r = std::rand()%2;//generate a random number in [0,1]
@@ -52,7 +52,7 @@ void random_initialization_test(){
     if (r==0){
       //using default tensor constructor
       if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 0){
-         std::cout << "[main.cc]: Default tensor constructor is used for tensor, TID= " << t_cnt << std::endl;
+         std::cout << "[main.cc]: Default tensor constructor is used for tensor, TID = " << t_cnt << ", BID = " << t_cnt << std::endl;
       }
       tensor_temp = new tensorflow::Tensor(t_cnt);
       tensorset.insert(tensor_temp);
@@ -61,6 +61,9 @@ void random_initialization_test(){
       //using copy tensor constructor
       //select a previous tensor index to initialize the new tensor
       r_t = std::rand()%tensorset.size()+1;//generate a random number in [1..t_cnt]
+      if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 0){
+         std::cout << "[main.cc]: Copy tensor constructor is used for tensor, TID = " << t_cnt << ". Seed tensor, TID = "<< r_t << std::endl;
+      }
       for(tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
         r_t--;
         if (r_t==0){
@@ -71,43 +74,41 @@ void random_initialization_test(){
         }
       }
     }
-    std::cout << "[main.cc]: step1 finished: allocate/copy a tensor" << std::endl;
+    //std::cout << "[main.cc]: step1 finished: allocate/copy a tensor" << std::endl;
     //the new tensor has been added to tensorset
 
     // step2: decide if we want to deallocate some tensors this iteration
     d = std::rand()%2;//generate a random number in [0,1]
+   
     if (d==1){
-      //deallocate a previous tensor this round
-      if (tensorset.size()>20) {
-        //we only deallocate tensor only if there are still 20 tensors alive
-        d_t = std::rand()%tensorset.size()+1;//generate a random number in [1..t_cnt]
-        while (tensor_dealloc.find(d_t) != tensor_dealloc.end()){
-          //this tensor index has already been deallocated!
+      int rnd = 0;
+      while ( rnd < d_num ){
+      rnd++;
+        //deallocate a previous tensor this round
+        if (tensorset.size()>10) {
+          //we only deallocate tensor only if there are still 20 tensors alive
           d_t = std::rand()%tensorset.size()+1;//generate a random number in [1..t_cnt]
-        }
-        //insert into deallocation set
-	tensor_dealloc.insert(d_t);
-        std::cout << "[main.cc]: before dealloc a tensor: " << tensorset.size() << std::endl;
-    	for(tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
+          //std::cout << "[main.cc]: before dealloc a tensor: " << tensorset.size() << std::endl;
+          for(tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
             d_t--;
             if (d_t==0){
-                tensor_temp = *tensorset_it;
-                tensorset.erase(tensor_temp);
-                std::cout << "[main.cc]: deallocate tensor, tid = " << tensor_temp->getid() << std::endl;
-                delete tensor_temp;
-                tensor_temp = NULL;
-                break;
+              tensor_temp = *tensorset_it;
+              tensorset.erase(tensor_temp);
+              std::cout << "[main.cc]: deallocate tensor, tid = " << tensor_temp->getid() << std::endl;
+              delete tensor_temp;
+              tensor_temp = NULL;
+              break;
             }
+          }
+        //std::cout << "[main.cc]: after dealloc a tensor: " << tensorset.size() << std::endl;
         }
-        std::cout << "[main.cc]: after dealloc a tensor: " << tensorset.size() << std::endl;
       }
     }
-    std::cout << "[main.cc]: step2 finished: deallocate a tensor or not: "<< d << std::endl;
+    //std::cout << "[main.cc]: step2 finished: deallocate a tensor or not: "<< d << std::endl;
 
     // step3: check if the buffer size overflows? Then gc or not
-    std::cout << "[main.cc]: Current total buffer size = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
     if(tensorflow::Buffer::buf_tracer.get_buffer_set_size()>tensorflow::Buffer::buf_tracer.get_thresh()){    
-      std::cout << "[main.cc]: Start tracing." << std::endl;
+      std::cout << "[main.cc]: Start tracing. Current total buffer size (memory) = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
       //get reference for BufTracer::tracing_set
       std::set<tensorflow::Buffer*>* tracing_set_ptr = tensorflow::Buffer::buf_tracer.get_tracing_set();
       //start tracing
@@ -117,16 +118,18 @@ void random_initialization_test(){
       tensorflow::Buffer::buf_tracer.mark_mv_garbage_set();
       //clean all garbage
       tensorflow::Buffer::buf_tracer.free_garbage_set();
-      std::cout << "[main.cc]: After GC, total buffer size = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
+      std::cout << "[main.cc]: After GC, total buffer size (memory) = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
     }
-    std::cout << "[main.cc]: step3 finished: garbage collect or not" << std::endl;
+    //std::cout << "[main.cc]: step3 finished: garbage collect or not" << std::endl;
   }
 
-  std::cout << "[main.cc] tensor set size="<<tensorset.size() << std::endl;
+  std::cout << "[main.cc] tensor set size (total tensors)="<<tensorset.size() << std::endl;
   for(tensorset_it = tensorset.begin(); tensorset_it != tensorset.end(); ++tensorset_it){
       tensor_temp = *tensorset_it;
       delete tensor_temp;
   }
+
+  std::cout << "[main.cc]: *cleanup* Current total buffer size (memory) = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
   //get reference for BufTracer::tracing_set
   std::set<tensorflow::Buffer*>* tracing_set_ptr = tensorflow::Buffer::buf_tracer.get_tracing_set();
   //start tracing
@@ -136,7 +139,7 @@ void random_initialization_test(){
   tensorflow::Buffer::buf_tracer.mark_mv_garbage_set();
   //clean all garbage
   tensorflow::Buffer::buf_tracer.free_garbage_set();
-
+  std::cout << "[main.cc]: *cleanup* After GC, total buffer size (memory) = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
 }
 
 
@@ -201,14 +204,14 @@ int main(){
   }
 
   //use linear initialization here
-  std::cout << "===start linear initialization ===" << std::endl;
-  linear_initialization_test();
-  std::cout << "===end linear initialization ===" << std::endl;
+  //std::cout << "===start linear initialization ===" << std::endl;
+  //linear_initialization_test();
+  //std::cout << "===end linear initialization ===" << std::endl;
   
   //use random initiatization here
-  //std::cout << "===start random initialization ===" << std::endl;
-  //random_initialization_test();
-  //std::cout << "===end random initialization ===" << std::endl;
+  std::cout << "===start random initialization ===" << std::endl;
+  random_initialization_test();
+  std::cout << "===end random initialization ===" << std::endl;
   return 0;
 }
 
