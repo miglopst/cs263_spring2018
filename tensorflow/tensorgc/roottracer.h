@@ -1,6 +1,7 @@
 #ifndef ROOT_TRACER
 #define ROOT_TRACER
 #include <set>
+#include <mutex>
 
 namespace tensorflow {
 
@@ -54,10 +55,11 @@ class RootTracer{
   //If a new tensor is allocated, we use addto_root_set to add the new tensor to this root_set
   //If an old tensor is deallocated, we use rmfrom_root_set to remove this tensor from this root_set
   //All objects added to the root_set must be Tensor objects
+  //std::atomic<std::set<T1*>> root_set;
   std::set<T1*> root_set;
 
   int trace_size;
-
+  std::mutex mtx;
 };//end RootTracer class
 
 

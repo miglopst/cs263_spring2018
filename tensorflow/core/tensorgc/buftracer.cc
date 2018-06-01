@@ -4,6 +4,8 @@
 #include <set>
 #include <iostream>
 #include <cstdlib>
+#include <assert.h>
+
 
 namespace tensorflow {
 
@@ -54,22 +56,27 @@ void BufTracer<T>::mark_mv_garbage_set(){
       //the given buffer is not in the tracing set!
       //move it to the garbage_set
       garbage_set.insert(temp_buf_ptr);
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:mark_mv_garbage_set(),the given buffer is moved to garbage_set.";
     }
     else{
       //the given buffer is in the tracing set!
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:mark_mv_garbage_set(),the given buffer can be traced.";
     }
   }
 
+  assert( (tracing_set.size()+garbage_set.size()) == buffer_set.size());
   //remove all garbage elements from buffer_set
   if(garbage_set.size() > 0) {
     for (garbage_set_it = garbage_set.begin(); garbage_set_it != garbage_set.end(); ++garbage_set_it){
       temp_buf_ptr = *garbage_set_it;
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:mark_mv_garbage_set(),rmfrom buffer set, rm size="<<temp_buf_ptr->size();
       this->rmfrom_buffer_set(temp_buf_ptr);
     }
   }
   else{
-    
+    LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:mark_mv_garbage_set(),garbage_set is empty.";
   }
+  assert(tracing_set.size() == buffer_set.size());
   //[WARNING] remove all elements from tracing_set
   tracing_set.clear();
 }
@@ -77,6 +84,7 @@ void BufTracer<T>::mark_mv_garbage_set(){
 template <typename T>
 void BufTracer<T>::free_garbage_set(){
   if(garbage_set.size() > 0){
+    LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:free_garbage_set(),start freeing garbage";
     typename std::set<T*>::iterator garbage_set_it;
     for (garbage_set_it = garbage_set.begin(); garbage_set_it != garbage_set.end(); ++garbage_set_it){
       delete *garbage_set_it;

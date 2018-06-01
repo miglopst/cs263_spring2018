@@ -63,8 +63,9 @@ bool RootTracer<T1, T2>::compare(RootTracer<T1, T2> tmp){
 
 template <typename T1, typename T2>
 void RootTracer<T1,T2>::addto_root_set(T1* newtensor){
+  mtx.lock();
   this->root_set.insert(newtensor);
-//  trace_counter += 1;
+  mtx.unlock();
   if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 3){
     std::cout << "[roottracer.cc]: Tensor inserted into rootset, TID = " << newtensor->getid() << std::endl;
   }
@@ -75,7 +76,9 @@ void RootTracer<T1,T2>::rmfrom_root_set(T1* oldtensor){
   if(std::getenv("DEBUG_FLAG") && atoi(std::getenv("DEBUG_FLAG")) == 3){
     std::cout << "[roottracer.cc]: Tensor removed from rootset, TID = " << oldtensor->getid() << std::endl;
   }
+  mtx.lock();
   this->root_set.erase(oldtensor);
+  mtx.unlock();
 }
 
 template <typename T1, typename T2>

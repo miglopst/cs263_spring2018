@@ -813,15 +813,15 @@ typename TTypes<T, NDIMS>::ConstTensor Tensor::flat_inner_outer_dims(
 inline Tensor::Tensor(const Tensor& other)
     : shape_(other.shape()), buf_(other.buf_) {
   if (buf_) buf_->Ref();
-  //Tensor::roottracer.addto_root_set(this);
-  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor copy constructor";
+  roottracer.addto_root_set(this);
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor copy constructor";
 }
 
 inline Tensor::Tensor(Tensor&& other)
     : shape_(std::move(other.shape())), buf_(other.buf_) {
   other.buf_ = nullptr;
-  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor move constructor";
-  //Tensor::roottracer.addto_root_set(this);
+  Tensor::roottracer.addto_root_set(this);
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor move constructor";
 }
 
 inline Tensor& Tensor::operator=(Tensor&& other) {

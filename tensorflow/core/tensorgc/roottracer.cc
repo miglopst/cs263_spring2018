@@ -55,14 +55,18 @@ bool RootTracer<T1, T2>::compare(RootTracer<T1, T2> tmp){
 
 template <typename T1, typename T2>
 void RootTracer<T1,T2>::addto_root_set(T1* newtensor){
+  mtx.lock();
   root_set.insert(newtensor);
+  mtx.unlock();
   trace_counter += 1;
-//  tracable_size += newtensor->size();
 }
 
 template <typename T1, typename T2>
 void RootTracer<T1,T2>::rmfrom_root_set(T1* oldtensor){
+  mtx.lock();
   root_set.erase(oldtensor);
+  mtx.unlock();
+  trace_counter -= 1;
 }
 
 template <typename T1, typename T2>

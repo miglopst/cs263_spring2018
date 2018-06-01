@@ -438,6 +438,13 @@ Buffer<T>::Buffer(Allocator* a, int64 n)
   //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1" << std::endl;
   TensorBuffer::buf_tracer.addto_buffer_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
+    // start tracing here
+    std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
+    Tensor::roottracer.start_tracing(tracing_set_ptr);
+    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    //TensorBuffer::buf_tracer.free_garbage_set();
+  }
 }
 
 template <typename T>
@@ -447,6 +454,13 @@ Buffer<T>::Buffer(Allocator* a, int64 n,
   //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2" << std::endl;
   TensorBuffer::buf_tracer.addto_buffer_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
+    // start tracing here
+    std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
+    Tensor::roottracer.start_tracing(tracing_set_ptr);
+    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    //TensorBuffer::buf_tracer.free_garbage_set();
+  }
 }
 
 template <typename T>
@@ -605,8 +619,8 @@ void UnrefIfNonNull(core::RefCounted* buf) {
 
 Tensor::Tensor() : Tensor(DT_FLOAT) {
   //calls constructor 2
-  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 1 (default)";
   //Tensor::roottracer.addto_root_set(this);
+  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 1 (default)";
 }
 
 Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) { 
@@ -619,13 +633,15 @@ Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) {
   */
   Tensor::roottracer.addto_root_set(this); 
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  /*
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-    TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    TensorBuffer::buf_tracer.free_garbage_set();
+    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    //TensorBuffer::buf_tracer.free_garbage_set();
   }
+  */
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
@@ -639,13 +655,15 @@ Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
   */
   Tensor::roottracer.addto_root_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 3: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  /*
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-    TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    TensorBuffer::buf_tracer.free_garbage_set();
+    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    //TensorBuffer::buf_tracer.free_garbage_set();
   }
+  */
   RefIfNonNull(buf);
 }
 
@@ -678,8 +696,8 @@ void Tensor::CheckIsAlignedAndSingleElement() const {
 
 Tensor::~Tensor() {
   //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor" << std::endl;
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
   Tensor::roottracer.rmfrom_root_set(this);
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
   UnrefIfNonNull(buf_);
 }
 
@@ -787,13 +805,15 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape)
   */
   Tensor::roottracer.addto_root_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  /*
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-    TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    TensorBuffer::buf_tracer.free_garbage_set();
+    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    //TensorBuffer::buf_tracer.free_garbage_set();
   }
+  */
 }
 
 Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
@@ -817,20 +837,22 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
   */
   Tensor::roottracer.addto_root_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  /*
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-    TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    TensorBuffer::buf_tracer.free_garbage_set();
+    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    //TensorBuffer::buf_tracer.free_garbage_set();
   }
+  */
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape)
     : Tensor(cpu_allocator(), type, shape) {
   //calls tensor constructor 4
-  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 6";
   //Tensor::roottracer.addto_root_set(this);
+  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 6";
 }
 
 template <typename T>

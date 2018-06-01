@@ -1,6 +1,7 @@
 #ifndef ROOT_TRACER
 #define ROOT_TRACER
 #include <set>
+#include <mutex>
 //#include "tensorflow/core/framework/tensor.h"
 
 namespace tensorflow {
@@ -49,6 +50,7 @@ class RootTracer{
   //If an old tensor is deallocated, we use rmfrom_root_set to remove this tensor from this root_set
   //All objects added to the root_set must be Tensor objects
   std::set<T1*> root_set;
+  std::mutex mtx;
   int trace_counter;
   int trace_thresh;
   //int trace_size;

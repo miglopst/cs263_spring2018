@@ -120,7 +120,7 @@ void random_initialization_test(){
       tensorflow::Buffer::buf_tracer.free_garbage_set();
       std::cout << "[main.cc]: After GC, total buffer size (memory) = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
     }
-    //std::cout << "[main.cc]: step3 finished: garbage collect or not" << std::endl;
+    std::cout << "[main.cc] total buffer memory = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
   }
 
   std::cout << "[main.cc] tensor set size (total tensors)="<<tensorset.size() << std::endl;
@@ -140,6 +140,7 @@ void random_initialization_test(){
   //clean all garbage
   tensorflow::Buffer::buf_tracer.free_garbage_set();
   std::cout << "[main.cc]: *cleanup* After GC, total buffer size (memory) = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
+  std::cout << "[main.cc] total buffer memory = " << tensorflow::Buffer::buf_tracer.get_buffer_set_size() << std::endl;
 }
 
 

@@ -90,6 +90,7 @@ inline bool RefCounted::Unref() const {
   if (RefCountIsOne() || ref_.fetch_sub(1) == 1) {
     // Make DCHECK in ~RefCounted happy
     DCHECK((ref_.store(0), true));
+    //[Peng] we will manually GC buffers
     delete this;
     return true;
   } else {

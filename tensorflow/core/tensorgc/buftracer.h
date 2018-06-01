@@ -9,8 +9,8 @@ class BufTracer{
  public:
   //class method members
 
-  //default threshold = 300MB
-  BufTracer(int tracing_thresh = 300*1024*1024);
+  //default threshold = 200MB
+  BufTracer(int tracing_thresh = 200*1024*1024);
 
   //clean all members
   ~BufTracer();
