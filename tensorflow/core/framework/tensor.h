@@ -30,6 +30,8 @@ limitations under the License.
 #include "tensorflow/core/tensorgc/roottracer.h"
 #include "tensorflow/core/tensorgc/buftracer.h"
 
+#include <mutex>
+
 namespace tensorflow {
 
 // Forward declarations.  In particular, we forward declare protos so that their
@@ -129,6 +131,9 @@ class Tensor {
 
   ///[Peng] tensor tracer
   static RootTracer<Tensor, TensorBuffer> roottracer;
+
+  //[Peng] mutex to eliminate data racing
+  static std::mutex mtx;
 
   /// Returns the data type.
   DataType dtype() const { return shape_.data_type(); }

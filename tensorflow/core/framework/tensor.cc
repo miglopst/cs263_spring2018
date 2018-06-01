@@ -435,7 +435,6 @@ struct ProtoHelper<Eigen::half> {
 template <typename T>
 Buffer<T>::Buffer(Allocator* a, int64 n)
     : BufferBase(a), data_(a->Allocate<T>(n)), elem_(n) {
-  //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1" << std::endl;
   TensorBuffer::buf_tracer.addto_buffer_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
@@ -451,7 +450,6 @@ template <typename T>
 Buffer<T>::Buffer(Allocator* a, int64 n,
                   const AllocationAttributes& allocation_attr)
     : BufferBase(a), data_(a->Allocate<T>(n, allocation_attr)), elem_(n) {
-  //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2" << std::endl;
   TensorBuffer::buf_tracer.addto_buffer_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
@@ -619,8 +617,8 @@ void UnrefIfNonNull(core::RefCounted* buf) {
 
 Tensor::Tensor() : Tensor(DT_FLOAT) {
   //calls constructor 2
-  //Tensor::roottracer.addto_root_set(this);
-  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 1 (default)";
+  Tensor::roottracer.addto_root_set(this);
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 1 (default)";
 }
 
 Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) { 
@@ -670,6 +668,7 @@ Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
 //[Peng]
 RootTracer<Tensor, TensorBuffer> Tensor::roottracer = RootTracer<Tensor, TensorBuffer>();
 BufTracer<TensorBuffer> TensorBuffer::buf_tracer = BufTracer<TensorBuffer>();
+std::mutex Tensor::mtx;
 
 bool Tensor::IsInitialized() const {
   return (buf_ != nullptr && buf_->data() != nullptr) ||
@@ -851,8 +850,8 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
 Tensor::Tensor(DataType type, const TensorShape& shape)
     : Tensor(cpu_allocator(), type, shape) {
   //calls tensor constructor 4
-  //Tensor::roottracer.addto_root_set(this);
-  //LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 6";
+  Tensor::roottracer.addto_root_set(this);
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 6";
 }
 
 template <typename T>

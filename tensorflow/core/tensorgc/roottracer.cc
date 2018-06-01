@@ -12,7 +12,6 @@ template <typename T1, typename T2>
 RootTracer<T1,T2>::RootTracer(int trace_thresh){
     this->trace_counter = 0;
     this->trace_thresh = trace_thresh;
-    //this->tracable_size = 0;
 }
 
 template <typename T1, typename T2>
@@ -55,18 +54,18 @@ bool RootTracer<T1, T2>::compare(RootTracer<T1, T2> tmp){
 
 template <typename T1, typename T2>
 void RootTracer<T1,T2>::addto_root_set(T1* newtensor){
-  mtx.lock();
+  Tensor::mtx.lock();
   root_set.insert(newtensor);
-  mtx.unlock();
-  trace_counter += 1;
+  Tensor::mtx.unlock();
+  this->trace_counter += 1;
 }
 
 template <typename T1, typename T2>
 void RootTracer<T1,T2>::rmfrom_root_set(T1* oldtensor){
-  mtx.lock();
+  Tensor::mtx.lock();
   root_set.erase(oldtensor);
-  mtx.unlock();
-  trace_counter -= 1;
+  Tensor::mtx.unlock();
+  this->trace_counter -= 1;
 }
 
 template <typename T1, typename T2>
@@ -76,24 +75,36 @@ int RootTracer<T1,T2>::getsize_root_set(){
 
 template <typename T1, typename T2>
 int RootTracer<T1,T2>::get_trace_counter(){
-    return trace_counter;
+    return this->trace_counter;
 }
 
 template <typename T1, typename T2>
 void RootTracer<T1,T2>::start_tracing(std::set<T2*>* tracing_set){
+  if (root_set.size() == 0){
+    LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/roottracer.cc:start_tracing(),root_set is empty!";
+    return;
+  }
   std::set<Tensor*>::iterator rootset_it;
   Tensor* tensor_temp;
   for(rootset_it = root_set.begin(); rootset_it != root_set.end(); ++rootset_it){
     tensor_temp = *rootset_it;
+    if (tensor_temp->getbuf() == nullptr){
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/roottracer.cc:start_tracing(),the given tensor has a null buffer!";
+      continue;
+    }
     if ( tracing_set->find(tensor_temp->getbuf()) != tracing_set->end()){
-      //this buffer is added to the tracing_set. do nothing      
+      //this buffer is added to the tracing_set. do nothing
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/roottracer.cc:start_tracing(),the buffer is already in the tracing_set!";
     }
     else{
       //this buffer is not in the tracing set, and can be reached. add it to the tracing set.
+      Tensor::mtx.lock();
       tracing_set->insert(tensor_temp->getbuf());
+      Tensor::mtx.unlock();
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/roottracer.cc:start_tracing(),the buffer can be traced and is added to the tracing_set!";
     }
   }
-  trace_counter = 0;
+  this->trace_counter = 0;
 }
 
 //initialization here is very important!
