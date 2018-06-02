@@ -74,8 +74,13 @@ void BufTracer<T>::mark_mv_garbage_set(){
     }
   }
 
-  LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/buftracer.cc:tracing_set="<<tracing_set.size()<<" garbage_set="<<garbage_set.size()<<" buffer_set="<<buffer_set.size();
-  assert( (tracing_set.size()+garbage_set.size()) == buffer_set.size());
+  LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/buftracer.cc: print size- tracing_set="<<tracing_set.size()<<" garbage_set="<<garbage_set.size()<<" buffer_set="<<buffer_set.size();
+
+  //defore turn of UnRef(), we should always detect 0 garbage
+  assert(garbage_set.size()==0);
+  //sometimes tracing_set is larger than buffer_set
+  //assert( (tracing_set.size()+garbage_set.size()) == buffer_set.size());
+
   //remove all garbage elements from buffer_set
   if(garbage_set.size() > 0) {
     for (garbage_set_it = garbage_set.begin(); garbage_set_it != garbage_set.end(); ++garbage_set_it){
@@ -87,7 +92,8 @@ void BufTracer<T>::mark_mv_garbage_set(){
   else{
     LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:mark_mv_garbage_set(),garbage_set is empty.";
   }
-  assert(tracing_set.size() == buffer_set.size());
+  //sometimes tracing_set is larger than buffer_set
+  //assert(tracing_set.size() == buffer_set.size());
 }
 
 template <typename T>

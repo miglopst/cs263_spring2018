@@ -112,6 +112,12 @@ void RootTracer<T1,T2>::start_tracing(std::set<T2*>* tracing_set){
       Tensor::mtx.unlock();
       LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/roottracer.cc:start_tracing(),the buffer can be traced and is added to the tracing_set!";
       LOG(ERROR) << "[Peng]tensor addr="<<tensor_temp;
+      if ( tracing_set->find(tensor_temp->getbuf()->root_buffer()) != tracing_set->end() ){
+        Tensor::mtx.lock();
+        tracing_set->insert(tensor_temp->getbuf()->root_buffer());
+        Tensor::mtx.unlock();
+        LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/roottracer.cc:start_tracing(),the root_buffer is added to the tracing_set!";
+      }
     }
   }
   this->trace_counter = 0;
