@@ -56,6 +56,7 @@ void BufTracer<T>::mark_mv_garbage_set(){
   for (buffer_set_it = buffer_set.begin(); buffer_set_it != buffer_set.end(); ++buffer_set_it){
     temp_buf_ptr = *buffer_set_it;
     if (temp_buf_ptr == nullptr){
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/buftracer.cc:mark_mv_garbage_set(),the given buffer in buffer_set is null.";
       continue;
     }
     if (tracing_set.find(temp_buf_ptr) == tracing_set.end()){
@@ -64,17 +65,18 @@ void BufTracer<T>::mark_mv_garbage_set(){
       Tensor::mtx.lock();
       garbage_set.insert(temp_buf_ptr);
       Tensor::mtx.unlock();
-      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:mark_mv_garbage_set(),the given buffer is moved to garbage_set.";
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/buftracer.cc:mark_mv_garbage_set(),the given buffer is moved to garbage_set.";
+      LOG(ERROR) << "[Peng]mark_mv_garbage_set():Buffer address: " << temp_buf_ptr;
     }
     else{
       //the given buffer is in the tracing set!
-      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:mark_mv_garbage_set(),the given buffer can be traced.";
+      LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/buftracer.cc:mark_mv_garbage_set(),the given buffer can be traced.";
     }
   }
 
-  //assert( (tracing_set.size()+garbage_set.size()) == buffer_set.size());
+  LOG(ERROR) << "[Peng]tensorflow/core/tensorgc/buftracer.cc:tracing_set="<<tracing_set.size()<<" garbage_set="<<garbage_set.size()<<" buffer_set="<<buffer_set.size();
+  assert( (tracing_set.size()+garbage_set.size()) == buffer_set.size());
   //remove all garbage elements from buffer_set
-  /*
   if(garbage_set.size() > 0) {
     for (garbage_set_it = garbage_set.begin(); garbage_set_it != garbage_set.end(); ++garbage_set_it){
       temp_buf_ptr = *garbage_set_it;
@@ -85,12 +87,7 @@ void BufTracer<T>::mark_mv_garbage_set(){
   else{
     LOG(ERROR) << "[Peng]tensorflow/core/tensorgc.cc:mark_mv_garbage_set(),garbage_set is empty.";
   }
-  */
-  //assert(tracing_set.size() == buffer_set.size());
-  //[WARNING] remove all elements from tracing_set
-  Tensor::mtx.lock();
-  tracing_set.clear();
-  Tensor::mtx.unlock();
+  assert(tracing_set.size() == buffer_set.size());
 }
 
 template <typename T>

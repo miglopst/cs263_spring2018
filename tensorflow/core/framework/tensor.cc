@@ -52,6 +52,10 @@ limitations under the License.
 #include "tensorflow/core/platform/types.h"
 #include "tensorflow/core/platform/variant_coding.h"
 
+//[Peng]backtrace information
+#include <execinfo.h>
+#define BT_BUF_SIZE 100
+
 namespace tensorflow {
 
 // Allow Tensors to be stored inside Variants with automatic
@@ -437,13 +441,7 @@ Buffer<T>::Buffer(Allocator* a, int64 n)
     : BufferBase(a), data_(a->Allocate<T>(n)), elem_(n) {
   TensorBuffer::buf_tracer.addto_buffer_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_1: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
-  if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
-    // start tracing here
-    std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
-    Tensor::roottracer.start_tracing(tracing_set_ptr);
-    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    //TensorBuffer::buf_tracer.free_garbage_set();
-  }
+  LOG(ERROR) << "[Peng]Buffer()_1: address=" << this;
 }
 
 template <typename T>
@@ -452,13 +450,27 @@ Buffer<T>::Buffer(Allocator* a, int64 n,
     : BufferBase(a), data_(a->Allocate<T>(n, allocation_attr)), elem_(n) {
   TensorBuffer::buf_tracer.addto_buffer_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Buffer()_2: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
-  if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
-    // start tracing here
-    std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
-    Tensor::roottracer.start_tracing(tracing_set_ptr);
-    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    //TensorBuffer::buf_tracer.free_garbage_set();
+  LOG(ERROR) << "[Peng]Buffer()_2: address=" << this;
+
+  /*
+  //print backtrace information
+  int j, nptrs;
+  void *buffer[BT_BUF_SIZE];
+  char **strings;
+  nptrs = backtrace(buffer, BT_BUF_SIZE);
+  LOG(ERROR) << "[Peng]bt address=" << nptrs;
+  strings = backtrace_symbols(buffer, nptrs);
+  if (strings == NULL) {
+    LOG(ERROR) << "[Peng]fail backtrace_symbols.";
   }
+  else{
+    for (j = 0; j < nptrs; j++){
+      LOG(ERROR) << strings[j];
+    }
+    delete strings;
+  }
+  //end print backtrace information  
+  */
 }
 
 template <typename T>
@@ -469,6 +481,7 @@ Buffer<T>::~Buffer() {
     }
     TensorBuffer::buf_tracer.rmfrom_buffer_set(this);
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:~Buffer(): size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+    LOG(ERROR) << "[Peng]~Buffer(): address=" << this;
     alloc_->Deallocate<T>(data_, elem_);
   }
 }
@@ -631,15 +644,13 @@ Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) {
   */
   Tensor::roottracer.addto_root_set(this); 
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 2: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
-  /*
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    TensorBuffer::buf_tracer.mark_mv_garbage_set();
     //TensorBuffer::buf_tracer.free_garbage_set();
   }
-  */
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
@@ -653,15 +664,13 @@ Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
   */
   Tensor::roottracer.addto_root_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 3: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
-  /*
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    TensorBuffer::buf_tracer.mark_mv_garbage_set();
     //TensorBuffer::buf_tracer.free_garbage_set();
   }
-  */
   RefIfNonNull(buf);
 }
 
@@ -697,6 +706,9 @@ Tensor::~Tensor() {
   //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor" << std::endl;
   Tensor::roottracer.rmfrom_root_set(this);
   LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor deconstructor: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
+  if (buf_){
+    LOG(ERROR) << "[Peng]~Tensor(): buffer address="<<buf_;
+  }
   UnrefIfNonNull(buf_);
 }
 
@@ -787,6 +799,8 @@ bool Tensor::RefCountIsOne() const {
 
 Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape)
     : shape_(shape), buf_(nullptr) {
+  Tensor::roottracer.addto_root_set(this);
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
   set_dtype(type);
   CHECK_NOTNULL(a);
   if (shape_.num_elements() > 0 || a->ShouldAllocateEmptyTensors()) {
@@ -802,22 +816,20 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape)
   else
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4: size=0";
   */
-  Tensor::roottracer.addto_root_set(this);
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 4: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
-  /*
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    TensorBuffer::buf_tracer.mark_mv_garbage_set();
     //TensorBuffer::buf_tracer.free_garbage_set();
   }
-  */
 }
 
 Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
                const AllocationAttributes& allocation_attr)
     : shape_(shape), buf_(nullptr) {
+  Tensor::roottracer.addto_root_set(this);
+  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
   set_dtype(type);
   CHECK_NOTNULL(a);
   if (shape_.num_elements() > 0 || a->ShouldAllocateEmptyTensors()) {
@@ -834,17 +846,13 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
   else
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5: size=0";
   */
-  Tensor::roottracer.addto_root_set(this);
-  LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:Tensor constructor 5: size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
-  /*
   if(TensorBuffer::buf_tracer.get_buffer_set_size()>=TensorBuffer::buf_tracer.get_thresh()) {
     // start tracing here
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
-    //TensorBuffer::buf_tracer.mark_mv_garbage_set();
+    TensorBuffer::buf_tracer.mark_mv_garbage_set();
     //TensorBuffer::buf_tracer.free_garbage_set();
   }
-  */
 }
 
 Tensor::Tensor(DataType type, const TensorShape& shape)
@@ -860,7 +868,7 @@ class SubBuffer : public TensorBuffer {
   // This buffer is an alias to buf[delta, delta + n).
   SubBuffer(TensorBuffer* buf, int64 delta, int64 n)
       : root_(buf->root_buffer()), data_(buf->base<T>() + delta), elem_(n) {
-    //std::cout << "[Peng]tensorflow/core/framework/tensor.cc:SubBuffer()" << std::endl;
+    LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:SubBuffer()";
     // Sanity check. The caller should ensure the sub buffer is valid.
     CHECK_LE(root_->base<T>(), this->base<T>());
     T* root_limit = root_->base<T>() + root_->size() / sizeof(T);
