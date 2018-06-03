@@ -479,7 +479,7 @@ Buffer<T>::~Buffer() {
     if (LogMemory::IsEnabled()) {
       RecordDeallocation();
     }
-    TensorBuffer::buf_tracer.rmfrom_buffer_set(this);
+    //TensorBuffer::buf_tracer.rmfrom_buffer_set(this);
     LOG(ERROR) << "[Peng]tensorflow/core/framework/tensor.cc:~Buffer(): size="<<TensorBuffer::buf_tracer.get_buffer_set_size();
     LOG(ERROR) << "[Peng]~Buffer(): address=" << this;
     alloc_->Deallocate<T>(data_, elem_);
@@ -649,7 +649,7 @@ Tensor::Tensor(DataType type) : shape_({0}), buf_(nullptr) {
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
     TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    //TensorBuffer::buf_tracer.free_garbage_set();
+    TensorBuffer::buf_tracer.free_garbage_set();
   }
 }
 
@@ -669,7 +669,7 @@ Tensor::Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf)
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
     TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    //TensorBuffer::buf_tracer.free_garbage_set();
+    TensorBuffer::buf_tracer.free_garbage_set();
   }
   RefIfNonNull(buf);
 }
@@ -821,7 +821,7 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape)
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
     TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    //TensorBuffer::buf_tracer.free_garbage_set();
+    TensorBuffer::buf_tracer.free_garbage_set();
   }
 }
 
@@ -851,7 +851,7 @@ Tensor::Tensor(Allocator* a, DataType type, const TensorShape& shape,
     std::set<TensorBuffer*>* tracing_set_ptr = TensorBuffer::buf_tracer.get_tracing_set();
     Tensor::roottracer.start_tracing(tracing_set_ptr);
     TensorBuffer::buf_tracer.mark_mv_garbage_set();
-    //TensorBuffer::buf_tracer.free_garbage_set();
+    TensorBuffer::buf_tracer.free_garbage_set();
   }
 }
 

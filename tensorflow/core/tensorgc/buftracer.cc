@@ -29,6 +29,7 @@ template <typename T>
 void BufTracer<T>::rmfrom_buffer_set(T* oldbuffer){
   Tensor::mtx.lock();
   buffer_set.erase(oldbuffer);
+  buffer_set.erase(oldbuffer->root_buffer());
   buffer_set_size -= oldbuffer->size();
   Tensor::mtx.unlock();
 }
@@ -103,7 +104,7 @@ void BufTracer<T>::free_garbage_set(){
     typename std::set<T*>::iterator garbage_set_it;
     for (garbage_set_it = garbage_set.begin(); garbage_set_it != garbage_set.end(); ++garbage_set_it){
       //The garbage elements have already been removed in mark_mv_garbage_set()
-      //TensorBuffer::buf_tracer.rmfrom_buffer_set(*garbage_set_it);
+      this->rmfrom_buffer_set(*garbage_set_it);
 
       Tensor::mtx.lock();
       delete *garbage_set_it;
