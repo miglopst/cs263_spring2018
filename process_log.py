@@ -1,4 +1,6 @@
 import re
+#import matplotlib
+#matplotlib.use('GTK')
 import matplotlib.pyplot as plt
 filepath = './log.txt'
 with open(filepath) as fp:
@@ -62,5 +64,6 @@ base = 1024*1024
 mem_status = [x/base for x in mem_status]
 plt.plot(mem_status)
 plt.ylabel('Mbytes')
-plt.show()  mem_status.append(current_size)
+plt.show()
+mem_status.append(current_size)
 
